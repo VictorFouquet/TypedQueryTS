@@ -17,6 +17,10 @@ The library provides different `Operators` to help implement the logic when buil
 - `some | all | none`: Array operators as `ListOperator`, can be used for array with any element type
 - `not | or`: Logical operators as `LogicalOperator`, can be used for a sub query object
 
+An operator util type to infer the value of an operator from the type of a target value is provided as `InferOperator<T>`.
+
+This util type enforces the previously described operator-value constraints.
+
 ## Helper types
 
 The library provides different helper types

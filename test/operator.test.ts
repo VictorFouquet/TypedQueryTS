@@ -1,4 +1,4 @@
-import { BooleanOperator, EqualityOp, ListOperator, LiteralOperator, LogicalOperator, LowerOp, NumericalOperator, UpperOp } from "../src/operator.types"
+import { BooleanOperator, EqualityOp, InferOperator, ListOperator, LiteralOperator, LogicalOperator, LowerOp, NumericalOperator, UpperOp } from "../src/operator.types"
 
 //---------------------------------------------------------------------- Equality Operator
 
@@ -290,3 +290,141 @@ testListOperator("or")
 testListOperator("not")
 // @ts-expect-error
 testListOperator("whatever")
+
+//---------------------------------------------------------------------- InferOperator
+
+function testInferOperator<T>(v: InferOperator<T>): void {}
+
+test('InferOperator<number> should allow NumericalOperator', () => {
+    expect(_ => testInferOperator<number>("eq")).not.toThrow();
+    expect(_ => testInferOperator<number>("lt")).not.toThrow();
+    expect(_ => testInferOperator<number>("lte")).not.toThrow();
+    expect(_ => testInferOperator<number>("gt")).not.toThrow();
+    expect(_ => testInferOperator<number>("gte")).not.toThrow();
+})
+
+// @ts-expect-error
+testInferOperator<number>("contains");
+// @ts-expect-error
+testInferOperator<number>("startswith");
+// @ts-expect-error
+testInferOperator<number>("endswith");
+// @ts-expect-error
+testInferOperator<number>("is");
+// @ts-expect-error
+testInferOperator<number>("not");
+// @ts-expect-error
+testInferOperator<number>("some");
+// @ts-expect-error
+testInferOperator<number>("all");
+// @ts-expect-error
+testInferOperator<number>("none");
+
+
+test('InferOperator<Date> should allow NumericalOperator', () => {
+    expect(_ => testInferOperator<Date>("eq")).not.toThrow();
+    expect(_ => testInferOperator<Date>("lt")).not.toThrow();
+    expect(_ => testInferOperator<Date>("lte")).not.toThrow();
+    expect(_ => testInferOperator<Date>("gt")).not.toThrow();
+    expect(_ => testInferOperator<Date>("gte")).not.toThrow();
+})
+
+// @ts-expect-error
+testInferOperator<Date>("contains");
+// @ts-expect-error
+testInferOperator<Date>("startswith");
+// @ts-expect-error
+testInferOperator<Date>("endswith");
+// @ts-expect-error
+testInferOperator<Date>("is");
+// @ts-expect-error
+testInferOperator<Date>("not");
+// @ts-expect-error
+testInferOperator<Date>("some");
+// @ts-expect-error
+testInferOperator<Date>("all");
+// @ts-expect-error
+testInferOperator<Dateboolean>("none");
+
+
+test('InferOperator<string> should allow LiteralOperator', () => {
+    expect(_ => testInferOperator<string>("eq")).not.toThrow();
+    expect(_ => testInferOperator<string>("contains")).not.toThrow();
+    expect(_ => testInferOperator<string>("startswith")).not.toThrow();
+    expect(_ => testInferOperator<string>("endswith")).not.toThrow();
+})
+
+// @ts-expect-error
+testInferOperator<string>("lt");
+// @ts-expect-error
+testInferOperator<string>("lte");
+// @ts-expect-error
+testInferOperator<string>("gt");
+// @ts-expect-error
+testInferOperator<string>("gte");
+// @ts-expect-error
+testInferOperator<string>("is");
+// @ts-expect-error
+testInferOperator<string>("not");
+// @ts-expect-error
+testInferOperator<string>("some");
+// @ts-expect-error
+testInferOperator<string>("all");
+// @ts-expect-error
+testInferOperator<string>("none");
+
+
+test('InferOperator<boolean> should allow BooleanOperator', () => {
+    expect(_ => testInferOperator<boolean>("is")).not.toThrow();
+    expect(_ => testInferOperator<boolean>("not")).not.toThrow();
+})
+
+// @ts-expect-error
+testInferOperator<boolean>("eq");
+// @ts-expect-error
+testInferOperator<boolean>("lt");
+// @ts-expect-error
+testInferOperator<boolean>("lte");
+// @ts-expect-error
+testInferOperator<boolean>("gt");
+// @ts-expect-error
+testInferOperator<boolean>("gte");
+// @ts-expect-error
+testInferOperator<boolean>("contains");
+// @ts-expect-error
+testInferOperator<boolean>("startswith");
+// @ts-expect-error
+testInferOperator<boolean>("endswith");
+// @ts-expect-error
+testInferOperator<boolean>("some");
+// @ts-expect-error
+testInferOperator<boolean>("all");
+// @ts-expect-error
+testInferOperator<boolean>("none");
+
+test('InferOperator<any[]> should allow ListOperator', () => {
+    expect(_ => testInferOperator<any[]>("some")).not.toThrow();
+    expect(_ => testInferOperator<any[]>("none")).not.toThrow();
+    expect(_ => testInferOperator<any[]>("all")).not.toThrow();
+})
+
+// @ts-expect-error
+testInferOperator<any[]>("eq");
+// @ts-expect-error
+testInferOperator<any[]>("lt");
+// @ts-expect-error
+testInferOperator<any[]>("lte");
+// @ts-expect-error
+testInferOperator<any[]>("gt");
+// @ts-expect-error
+testInferOperator<any[]>("gte");
+// @ts-expect-error
+testInferOperator<any[]>("contains");
+// @ts-expect-error
+testInferOperator<any[]>("startswith");
+// @ts-expect-error
+testInferOperator<any[]>("endswith");
+// @ts-expect-error
+testInferOperator<any[]>("is");
+// @ts-expect-error
+testInferOperator<any[]>("not");
