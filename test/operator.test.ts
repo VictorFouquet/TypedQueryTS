@@ -239,11 +239,11 @@ testLogicalOperator("gt")
 // @ts-expect-error
 testLogicalOperator("gte")
 // @ts-expect-error
-testNuLogicalOperator("contains")
+testLogicalOperator("contains")
 // @ts-expect-error
-testNuLogicalOperator("startswith")
+testLogicalOperator("startswith")
 // @ts-expect-error
-testNuLogicalOperator("endswith")
+testLogicalOperator("endswith")
 // @ts-expect-error
 testLogicalOperator("some")
 // @ts-expect-error
