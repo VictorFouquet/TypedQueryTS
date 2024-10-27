@@ -24,3 +24,8 @@ export type EntityScalarKeys<T> = {
 export type EntityListKeys<T> = {
     [K in keyof T]: T[K] extends (infer U)[] ? K : never
 }[keyof T];
+
+
+//------------------------------------------------------------------------------------ Logical operation helpers
+// Helper type to enforce XOR between two types
+export type XOR<T, U> = (T & { [K in keyof U]?: never }) | (U & { [K in keyof T]?: never });
