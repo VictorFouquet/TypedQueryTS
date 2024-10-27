@@ -1,5 +1,13 @@
 import { NumericalOperator } from "../src/operator.types";
-import { BooleanOperation, DoubleNumericalOperationType, DoubleNumericalOperations, LiteralOperation, NumericalOperation, SingleNumericalOperationType, SingleNumericalOperations } from "../src/operation.types";
+import {
+    BooleanOperation,
+    DoubleNumericalOperationType,
+    DoubleNumericalOperations,
+    LiteralOperation,
+    NumericalOperation,
+    SingleNumericalOperationType,
+    SingleNumericalOperations
+} from "../src/operation.types";
 
 
 //---------------------------------------------------------------------- SingleNumericalOperationType
@@ -251,8 +259,8 @@ testNumericalOperation({ "lt": 0, "gt": "" });
 
 function testLiteralOperation(op: LiteralOperation): void {}
 
-test('LiteralOperation should allow any combination of literal operators', () => {
-
+test('LiteralOperation should allow legal combination of literal operators', () => {
+    expect(_ => testLiteralOperation({ "eq": "" }));
     expect(_ => testLiteralOperation({ "contains": "" }));
     expect(_ => testLiteralOperation({ "startswith": "" }));
     expect(_ => testLiteralOperation({ "endswith": "" }));
@@ -269,21 +277,11 @@ testLiteralOperation({ });
 // @ts-expect-error
 testLiteralOperation({ "whatever": "" });
 // @ts-expect-error
-testLiteralOperation({ "contains": 0 });
+testLiteralOperation({ "eq": "", "contains": "" });
 // @ts-expect-error
-testLiteralOperation({ "contains": 0, "startswith": "" });
+testLiteralOperation({ "eq": "", "startswith": "" });
 // @ts-expect-error
-testLiteralOperation({ "contains": new Date() });
-// @ts-expect-error
-testLiteralOperation({ "contains": new Date(), "startswith": "" });
-// @ts-expect-error
-testLiteralOperation({ "contains": [] });
-// @ts-expect-error
-testLiteralOperation({ "contains": [], "startswith": "" });
-// @ts-expect-error
-testLiteralOperation({ "contains": true });
-// @ts-expect-error
-testLiteralOperation({ "contains": true, "startswith": "" });
+testLiteralOperation({ "eq": "", "endswith": "" });
 
 
 //---------------------------------------------------------------------- BooleanOperation

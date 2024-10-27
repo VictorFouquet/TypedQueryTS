@@ -1,5 +1,6 @@
-import { NumericalOperator, LowerOp, UpperOp, LiteralOperator, BooleanOperator } from "./operator.types";
+import { NumericalOperator, LowerOp, UpperOp, LiteralOperator, BooleanOperator, EqualityOp } from "./operator.types";
 import { AtLeastOne, ExactlyOne } from "./utils.types";
+
 
 // Numerical single operation type generation
 export type SingleNumericalOperationType<K extends NumericalOperator> = {
@@ -35,9 +36,16 @@ export type DoubleNumericalOperations = {
     }[UpperOp];
 }[LowerOp];
 
+
 // Numerical operation must contain either a single operator or a valid combination of two operators
 export type NumericalOperation = SingleNumericalOperations | DoubleNumericalOperations;
-// Literal operation must contain at least one operator
-export type LiteralOperation = AtLeastOne<{ [K in LiteralOperator]: string }>
+
+// Literal operation must contain at least one operator and invalid any combination containing "eq"
+export type LiteralOperation = ExactlyOne<{
+    [K in LiteralOperator]: K extends EqualityOp ? string : never
+}> | AtLeastOne<{
+    [K in LiteralOperator]: K extends EqualityOp ? never : string
+}>
+
 // Boolean operation must contain exactly one operator
 export type BooleanOperation = ExactlyOne<{ [K in BooleanOperator]: boolean }>

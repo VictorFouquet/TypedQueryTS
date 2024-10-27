@@ -6,7 +6,7 @@ export type UpperOp = 'gt' | 'gte';  // Greater than operators
 export type NumericalOperator = EqualityOp | LowerOp | UpperOp;
 
 // String comparison operators
-export type LiteralOperator = 'eq' | 'contains' | 'startswith' | 'endswith';
+export type LiteralOperator = EqualityOp | 'contains' | 'startswith' | 'endswith';
 
 // Boolean operators
 export type BooleanOperator = 'is' | 'not';
