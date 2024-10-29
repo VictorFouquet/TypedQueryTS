@@ -2,7 +2,7 @@
 
 **TypedQuery** is a TypeScript type library designed to help developers to abstract their queries.
 
-It is aimed at decoupling a core application from any query related external dependencies, including ORMs, providing a backbone for building queries in typed trees that can the be smoothly translated to any target ORM or raw queries.
+It is aimed at decoupling a core application from any query related external dependencies, including ORMs, providing a backbone for building queries in typed trees that can then be seamlessly translated to any target ORM or raw query language.
 
 ## Condition types
 
@@ -191,6 +191,79 @@ condition = {
 };
 ```
 
+### Logical queries
+
+The `WhereQuery` type makes use of `LogicalOperator` to offer flexibility when dealing with queries.
+
+The default association in a combined condition is an implicit logical `and`.
+
+#### Or queries
+
+- An or query for type T must be associated to a tupple containing two subqueries of type `WhereQuery<T>`
+
+Examples:
+
+```typescript
+let condition: WhereCondition<User>;
+
+// Get users whose id is either 0 or 1
+condition = {
+    or: [
+        { id: 0 },
+        { id: 1 }
+    ]
+};
+
+// Get users whose name starts with John or ends with Doe
+condition = {
+    or: [
+        { name: { startswith: "John" } },
+        { name: { endswith: "Doe" } }
+    ]
+};
+```
+
+#### Not queries
+
+- A not query for type T must be associated to a subquery of type `WhereQuery<T>`
+
+Examples:
+
+```typescript
+let condition: WhereCondition<User>;
+
+// Get users whose id is not 0
+condition = {
+    not: { id: 0 }
+};
+
+// Get users whose name does not starts with John
+condition = {
+    not: { 
+        name: { startswith: "John" }
+    }
+};
+```
+
+#### Combined logical queries
+
+- Any logical combination can be used to build a query
+
+Examples:
+
+```typescript
+let condition: WhereCondition<User>;
+
+// Get users whose name starts with "John" OR ends with "Doe" AND is NOT "John Doe"
+condition = {
+    or: [
+        { name: { startswith: "John" } },
+        { name: { endswith: "Doe" } }
+    ],
+    not: { name: "John Doe" }
+};
+```
+
 ## Operator types
 
 The library provides different `Operators` to help implement the logic when building a query.
@@ -299,6 +372,3 @@ The library provides different helper types
 
 - `EntityScalarKeys<T>` extracts all the fields of a type T whose value is a scalar as a string union
 - `EntityListKeys<T>` extracts all the fields of a type T whose value is an array as a string union
-
-README.md
-Affichage de README.md en cours...
