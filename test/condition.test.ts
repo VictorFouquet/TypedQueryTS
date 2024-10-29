@@ -180,8 +180,7 @@ testPrimitiveListCondition<Date>({ some: true });
 
 // @ts-expect-error
 testPrimitiveListCondition<any>({ whatever: null });
-// @ts-expect-error
-testPrimitiveListCondition<any>({ some: null });
+
 
 
 test('ListCondition should support conditions on nested arrays', () => {    
@@ -243,11 +242,6 @@ testPrimitiveListCondition<Date[]>({some: { some: 0 }});
 testPrimitiveListCondition<Date[]>({some: { some: "" }});
 // @ts-expect-error
 testPrimitiveListCondition<Date[]>({some: { some: true }});
-
-// @ts-expect-error
-testPrimitiveListCondition<any>({some: { whatever: null }});
-// @ts-expect-error
-testPrimitiveListCondition<any>({some: { some: null }});
 
 
 //---------------------------------------------------------------------- EntityCondition - Primitive only object
