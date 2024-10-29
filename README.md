@@ -4,6 +4,193 @@
 
 It is aimed at decoupling a core application from any query related external dependencies, including ORMs, providing a backbone for building queries in typed trees that can the be smoothly translated to any target ORM or raw queries.
 
+## Condition types
+
+Condition types are the main building blocks for typing a `where` clause.
+
+`WhereCondition` type takes a generic argument from which it can extract the queryable fields.
+
+It also allows to build sub-queries on nested entities and collections contained in the main object.
+
+Logical operations `or` and `not` can be implemented at the query's root level.
+
+By default, the association of fields inside the query object is set to a logical `and`.
+
+The following example objects will be used to illustrate the different queries that can be built :
+
+```typescript
+interface User {
+    id: number
+    firstname: string,
+    lastname: string,
+    address: Address,
+    grades: number[],
+    todos: Todo[],
+    binGrid: boolean[][]
+};
+
+interface Address {
+    streetNumber: number,
+    streetName: string,
+    zipcode: number,
+    city: string
+};
+
+interface Todo {
+    title: string
+}
+```
+
+### Scalar queries
+
+#### Primitive queries
+
+- Scalar queries can be performed on any scalar field of the entity, either it is a primitive or a nested entity.
+- A primitive scalar can be associated to the `OperationType` object corresponding to its value.
+- Alternatively, the scalar key can be directly associated to the value used for the query, representing an equality operation query.
+
+Examples:
+
+```typescript
+let condition: WhereCondition<User>;
+
+condition = { // Simple query to get user by id
+    id: 5
+};
+// Composed query combining both direct equality and LiteralOperation
+condition = {
+    firstname: {
+        startswith: "J", endswith: "n"
+    },
+    lastname: "Doe"
+};
+
+// Invalid as User interface doesnt contain an email field
+condition = {
+    email: "abc@mail.com"
+}
+```
+
+#### Nested entity query
+
+- A nested entity scalar query must be a sub-query containing at least one of the nested entity fields
+
+Examples:
+
+```typescript
+let condition: WhereCondition<User>;
+
+// Nested query getting users whose address' zipcode equals 123456
+condition = {
+    address: {
+        zipcode: 12345
+    }
+};
+// Composed query on nested entity field
+condition = {
+    address: {
+        street: "Main Street",
+        city: { contains: "city" }
+    }
+};
+// Composed query combining primitive and nested entity query
+condition = {
+    lastname: "Doe",
+    address: {
+        street: "Main Street",
+        city: { contains: "city" }
+    }
+};
+
+// Invalid as nested Address interface doesnt contain a state field
+condition = {
+    address: { state: "State" }
+}
+```
+
+### List queries
+
+The `WhereCondition` makes use of the `ListOperator` type to handle queries on list fields.
+
+Both entity and primitive elements are supported to create the list queries.
+
+A list query inside a List field can contain only one list operator.
+
+**Note that all the following examples can be combined**, for instance, the `WhereCondition` type would support queries on an object containing lists of nested objects that contain nested arrays of primitives in their fields.
+
+#### Primitive list query
+
+- A primitive list query can be built with any of the `ListOperator` keys
+- The associated value must be an operation compatible with the value of the items in the list
+
+Examples:
+
+```typescript
+let conditon: WhereCondition<User>;
+// Condition to get all users who have at least one 5 in their grades
+condition = {
+    grades: {
+        some: 5
+    }
+};
+
+// Condition to get all users who have none of their grades between 5 and 15
+condition = {
+    grades: {
+        none: { gte: 5, lte: 15}
+    }
+};
+
+// Invalid for combining two list conditions inside the same field
+condition = {
+    grades: {
+        all: 5,
+        some: { gt: 5 }
+    }
+};
+```
+
+#### Entity list query
+
+- An entity list query can be built with any of the `ListOperator` keys
+- The associated value must be an entity operation compatible with the entity elements keys
+
+Examples:
+
+```typescript
+let conditon: WhereCondition<User>;
+
+// Condition to get all users who have at least one todo with title "Todo" in their todos
+condition = {
+    todos: {
+        some: {
+            title: "Todo"
+        }
+    }
+};
+```
+
+#### Nested list query
+
+- A nested list query can be built with any of the `ListOperator` keys
+- A nested list query can only be built for fields that are nested arrays of primitives or objects
+- The `ListOperator` must be nested to follow the structure of the nested arrays they target
+
+Examples:
+
+```typescript
+let conditon: WhereCondition<User>;
+
+// Condition to get users whose binary grid has at least one row with all values set to true
+condition = {
+    binGrid: {
+        some: {
+            all: true
+        }
+    }
+};
+```
+
 ## Operator types
 
 The library provides different `Operators` to help implement the logic when building a query.
@@ -112,3 +299,6 @@ The library provides different helper types
 
 - `EntityScalarKeys<T>` extracts all the fields of a type T whose value is a scalar as a string union
 - `EntityListKeys<T>` extracts all the fields of a type T whose value is an array as a string union
+
+README.md
+Affichage de README.md en cours...
