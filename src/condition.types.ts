@@ -1,69 +1,39 @@
 import { NumericalOperation, LiteralOperation, BooleanOperation } from "./operation.types";
 import { ListOperator } from "./operator.types";
-import { AtLeastOne, EntityScalarKeys, EntityListKeys, ExactlyOne, Primitive } from "./utils.types";
+import { AtLeastOne, ExactlyOne, Primitive } from "./utils.types";
 
 
-// Primitive query
-export type PrimitiveQuery<V extends Primitive> =
-    V extends number | Date ?
-        NumericalOperation | number | Date :
-        V extends string ?
-            LiteralOperation | string :
-            V extends boolean ?
-                BooleanOperation | boolean :
-                never;
+// Types a condition to query on an object
+export type EntityCondition<T> = AtLeastOne<{
+    [K in keyof T]: ValueCondition<T[K]>
+}>
 
-export type ValueQuery<V> =
+// Types a condition to query on a value
+export type ValueCondition<V> =
     V extends Primitive ?
-            PrimitiveQuery<V> :
+            PrimitiveCondition<V> :
             V extends (infer U)[] ?
-                ListQuery<U> :
+                ListCondition<U> :
                 V extends object ?
-                    EntityQuery<V> :
+                    EntityCondition<V> :
                     never;
 
-// Entity query
-export type EntityQuery<T> = AtLeastOne<{
-    [K in keyof T]: ValueQuery<T[K]>
+// Types a condition to query on a Primitive
+export type PrimitiveCondition<V extends Primitive> =
+    V extends number | Date ?
+        NumericalOperation | V:
+        V extends string ?
+            LiteralOperation | V :
+            V extends boolean ?
+                BooleanOperation | V :
+                never;
+
+// Types a condition to query on a list
+export type ListCondition<T> = ExactlyOne<{
+    [K in ListOperator]: ValueCondition<T>
 }>
 
-// List query
-export type ListQuery<T> = ExactlyOne<{
-    [K in ListOperator]: ValueQuery<T>
-}>
-
-
-// Field condition types based on field type
-export type FieldCondition<V> = V extends number | Date
-    ? NumericalOperation
-    : V extends string
-    ? LiteralOperation
-    : V extends boolean
-    ? BooleanOperation
-    : V extends object
-    ? AtLeastOne<ScalarCondition<V>>
-    : never;
-
-// Conditions for scalar fields
-export type ScalarCondition<T> = {
-    [K in EntityScalarKeys<T>]: FieldCondition<T[K]> | T[K]
-};
-
-// Conditions for array fields
-export type ListElementCondition<T> = AtLeastOne<{
-    [K in EntityListKeys<T>]: T[K] extends (infer U)[]
-        ? U extends object
-            ? AtLeastOne<ScalarCondition<U>>            // For array of objects
-            : FieldCondition<U>                         // For array of primitives
-        : never
-}>;
-
-// Array operation conditions
-export type ListCondition<T> = {
-    [K in ListOperator]: ListElementCondition<T>
-};
-  
-// Logical query composition
+// Logical condition composition
 export type LogicalCondition<T> = OrCondition<T> | NotCondition<T>;
 
 // OR requires exactly two subconditions
@@ -76,9 +46,8 @@ export type NotCondition<T> = {
     not: WhereCondition<T>
 };
 
-// Main query type
+// Main where condition type
 export type WhereCondition<T> = AtLeastOne<
-    ScalarCondition<T> &
     LogicalCondition<T> &
-    ListCondition<T>
+    EntityCondition<T>
 >;
