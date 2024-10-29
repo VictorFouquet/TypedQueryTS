@@ -1,4 +1,4 @@
-import { EntityCondition, ListCondition, PrimitiveCondition, ValueCondition } from "../src/condition.types";
+import { EntityCondition, ListCondition, OrCondition, NotCondition, PrimitiveCondition, ValueCondition, WhereCondition } from "../src/condition.types";
 import { Primitive } from "../src/utils.types";
 
 
@@ -631,3 +631,137 @@ test('Entity condition should handle complex combination of both direct and nest
         }
     }));
 });
+
+
+//---------------------------------------------------------------------- OrCondition
+
+interface EntityConditionOr {
+    id: number,
+    name: string,
+    createdAt: Date,
+    active: boolean
+};
+
+function testOrCondition(v: OrCondition<EntityConditionOr>): void {}
+
+test('OrCondition should contain two sub conditions', () => {
+    expect(_ => testOrCondition({ or: [
+        { id: 0 },
+        { id: 1 }
+    ]}));
+    expect(_ => testOrCondition({ or: [
+        { id: 0 },
+        { name: { contains: "" } }
+    ]}));
+});
+
+test('OrCondition should support nested or', () => {
+    expect(_ => testOrCondition({ or: [
+        {
+            or: [
+                { id: 0 },
+                { id: 1 }
+            ]
+        },
+        {
+            or: [
+                { id: 2 },
+                { id: 3 }
+            ]
+        }
+    ]}));
+});
+
+// Invalid for providing empty object
+// @ts-expect-error
+testOrCondition({  });
+
+// Invalid for providing empty array
+// @ts-expect-error
+testOrCondition({ or: [ ] });
+
+// Invalid for providing only one subcondition
+// @ts-expect-error
+testOrCondition({ or: [ { id: 5 } ] });
+
+// Invalid for providing one invalid subcontion
+testOrCondition({ or: [ 
+    { id: 5 },
+    // @ts-expect-error
+    { name: { lt: 5 }} 
+] });
+
+//---------------------------------------------------------------------- NotCondition
+
+interface EntityConditionNot {
+    id: number,
+    name: string,
+    createdAt: Date,
+    active: boolean
+};
+
+function testNotCondition(v: NotCondition<EntityConditionNot>): void {}
+
+test('NotCondition should contain one sub conditions', () => {
+    expect(_ => testNotCondition({ not: { id: 0 } }));
+    expect(_ => testNotCondition({ not: { id: 0, name: { contains: "" } }}));
+});
+
+//---------------------------------------------------------------------- Combined logical condition
+
+interface EntityLogicalCondition {
+    id: number,
+    name: string,
+    createdAt: Date,
+    active: boolean
+};
+
+function testCombinedLogicalCondition(v: WhereCondition<EntityLogicalCondition>): void {}
+
+test('OrCondition should contain one sub conditions', () => {
+    expect(_ => testCombinedLogicalCondition({
+        active: true,
+        not: { or: [ { id: 0 }, { id: 1 } ] },
+        or: [
+            { not: { name: "" } },
+            { name: { contains: " " } }
+        ]
+    }));
+    expect(_ => testCombinedLogicalCondition({ not: { id: 0, name: { contains: "" } }}));
+});
+
+test('OrCondition should support nested or', () => {
+    expect(_ => testNotCondition({ or: [
+        {
+            or: [
+                { id: 0 },
+                { id: 1 }
+            ]
+        },
+        {
+            or: [
+                { id: 2 },
+                { id: 3 }
+            ]
+        }
+    ]}));
+});
+
+// Invalid for providing empty object
+// @ts-expect-error
+testOrCondition({  });
+
+// Invalid for providing empty array
+// @ts-expect-error
+testOrCondition({ or: [ ] });
+
+// Invalid for providing only one subcondition
+// @ts-expect-error
+testOrCondition({ or: [ { id: 5 } ] });
+
+// Invalid for providing one invalid subcontion
+testOrCondition({ or: [ 
+    { id: 5 },
+    // @ts-expect-error
+    { name: { lt: 5 }} 
+] });
