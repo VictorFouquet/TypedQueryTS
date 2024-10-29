@@ -1,44 +1,40 @@
 import { NumericalOperator, LowerOp, UpperOp, LiteralOperator, BooleanOperator, EqualityOp } from "./operator.types";
-import { AtLeastOne, ExactlyOne } from "./utils.types";
+import { AtLeastOne, ExactlyOne, Numeric } from "./utils.types";
 
 
 // Numerical single operation type generation
-export type SingleNumericalOperationType<K extends NumericalOperator> = {
-    [P in K]: number | Date;
+export type SingleNumericalOperationType<K extends NumericalOperator, V> = {
+    [P in K]: V;
 } & {
     [P in Exclude<NumericalOperator, K>]?: never;
 };
 
 // Numerical double operation type generation
-export type DoubleNumericalOperationType<T extends NumericalOperator, U extends NumericalOperator> =(
+export type DoubleNumericalOperationType<T extends NumericalOperator, U extends NumericalOperator, V> =(
     {
-        [P in T | U]: number;
-    } & {
-        [P in Exclude<NumericalOperator, T | U>]?: never;
-    }
-) | (
-    {
-        [P in T | U]: Date;
+        [P in T | U]: V;
     } & {
         [P in Exclude<NumericalOperator, T | U>]?: never;
     }
 );
 
 // Generate all single valid numerarical operations
-export type SingleNumericalOperations = {
-    [K in NumericalOperator]: SingleNumericalOperationType<K>;
+export type SingleNumericalOperations<V> = {
+    [K in NumericalOperator]: SingleNumericalOperationType<K, V>;
 }[NumericalOperator];
 
 // Generate all valid double numerical operations from operators combinations
-export type DoubleNumericalOperations = {
+export type DoubleNumericalOperations<V> = {
     [L in LowerOp]: {
-        [U in UpperOp]: DoubleNumericalOperationType<L, U>;
+        [U in UpperOp]: DoubleNumericalOperationType<L, U, V>;
     }[UpperOp];
 }[LowerOp];
 
 
 // Numerical operation must contain either a single operator or a valid combination of two operators
-export type NumericalOperation = SingleNumericalOperations | DoubleNumericalOperations;
+export type NumericalOperation<V extends Numeric> = V extends number ?
+    SingleNumericalOperations<number> | DoubleNumericalOperations<number> :
+    SingleNumericalOperations<Date> | DoubleNumericalOperations<Date>;
 
 // Literal operation must contain at least one operator and invalid any combination containing "eq"
 export type LiteralOperation = ExactlyOne<{

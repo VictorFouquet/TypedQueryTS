@@ -21,7 +21,7 @@ export type ValueCondition<V> =
 // Types a condition to query on a Primitive
 export type PrimitiveCondition<V extends Primitive> =
     V extends number | Date ?
-        NumericalOperation | V:
+        NumericalOperation<V> | V:
         V extends string ?
             LiteralOperation | V :
             V extends boolean ?

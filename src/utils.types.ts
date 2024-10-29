@@ -1,7 +1,8 @@
 //------------------------------------------------------------------------------------ Primitive helper
 
-export type Primitive = number | Date | string | boolean;
- 
+export type Numeric = number | Date;
+export type Primitive = Numeric | string | boolean;
+
 //------------------------------------------------------------------------------------ Object structure helpers
 
 // Ensures that an object contains at least one key from T
