@@ -10,23 +10,17 @@ export type EntityCondition<T> = AtLeastOne<{
 
 // Types a condition to query on a value
 export type ValueCondition<V> =
-    V extends Primitive ?
-            PrimitiveCondition<V> :
-            V extends (infer U)[] ?
-                ListCondition<U> :
-                V extends object ?
-                    EntityCondition<V> :
-                    never;
+    V extends Primitive ? PrimitiveCondition<V> :
+    V extends (infer U)[] ? ListCondition<U> :
+    V extends object ? EntityCondition<V> :
+    never;
 
 // Types a condition to query on a Primitive
 export type PrimitiveCondition<V extends Primitive> =
-    V extends number | Date ?
-        NumericalOperation<V> | V:
-        V extends string ?
-            LiteralOperation | V :
-            V extends boolean ?
-                BooleanOperation | V :
-                never;
+    V extends number | Date ? NumericalOperation<V> | V:
+    V extends string ? LiteralOperation | V :
+    V extends boolean ? BooleanOperation | V :
+    never;
 
 // Types a condition to query on a list
 export type ListCondition<T> = ExactlyOne<{
@@ -50,3 +44,8 @@ export type NotCondition<T> = {
 export type WhereCondition<T> =
     | LogicalCondition<T>
     | EntityCondition<T>;
+
+// Embeds WhereCondition in a where clause
+export type WhereClause<T> = {
+    where: WhereCondition<T>
+}
