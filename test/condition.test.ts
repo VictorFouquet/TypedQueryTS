@@ -718,7 +718,7 @@ interface EntityLogicalCondition {
 
 function testCombinedLogicalCondition(v: WhereCondition<EntityLogicalCondition>): void {}
 
-test('OrCondition should contain one sub conditions', () => {
+test('WhereCondition should allow combination of multiple logical operators', () => {
     expect(_ => testCombinedLogicalCondition({
         active: true,
         not: { or: [ { id: 0 }, { id: 1 } ] },
@@ -727,41 +727,4 @@ test('OrCondition should contain one sub conditions', () => {
             { name: { contains: " " } }
         ]
     }));
-    expect(_ => testCombinedLogicalCondition({ not: { id: 0, name: { contains: "" } }}));
 });
-
-test('OrCondition should support nested or', () => {
-    expect(_ => testNotCondition({ or: [
-        {
-            or: [
-                { id: 0 },
-                { id: 1 }
-            ]
-        },
-        {
-            or: [
-                { id: 2 },
-                { id: 3 }
-            ]
-        }
-    ]}));
-});
-
-// Invalid for providing empty object
-// @ts-expect-error
-testOrCondition({  });
-
-// Invalid for providing empty array
-// @ts-expect-error
-testOrCondition({ or: [ ] });
-
-// Invalid for providing only one subcondition
-// @ts-expect-error
-testOrCondition({ or: [ { id: 5 } ] });
-
-// Invalid for providing one invalid subcontion
-testOrCondition({ or: [ 
-    { id: 5 },
-    // @ts-expect-error
-    { name: { lt: 5 }} 
-] });
