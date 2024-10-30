@@ -4,6 +4,53 @@
 
 It is aimed at decoupling a core application from any query related external dependencies, including ORMs, providing a backbone for building queries in typed trees that can then be seamlessly translated to any target ORM or raw query language.
 
+## Selection type
+
+Selection type is the building blocks for typing a `select` clause.
+
+`Selection` type takes a generic argument from which it can extract the selectable fields.
+
+It also allows to build sub-selections on nested entities and flat arrays contained in the main object.
+
+It doesn't allow direct selections on nested arrays, those cases should be handled by flat arrays of objects containing flat arrays themselves.
+
+Examples: 
+
+```typescript
+interface User {
+    id: number
+    firstname: string,
+    address: Address,
+    grades: number[],
+    todos: Todo[],
+};
+
+interface Address {
+    streetNumber: number,
+    streetName: string,
+    zipcode: number,
+    city: string
+};
+
+interface Todo {
+    title: string
+    ratings: number[]
+}
+
+const selection: Selection<User> = {
+    id: true,              // Direct field selection
+    address: {
+        zipcode: true      // Nested object direct field selection
+    },
+    grades: true,          // Flat array direct field selection
+    todos: {
+        title: true,       // Flat array of nested object field direct selection
+        ratings: true      // Nested array indirect selection
+    }
+}
+```
+
+
 ## Condition types
 
 Condition types are the main building blocks for typing a `where` clause.
