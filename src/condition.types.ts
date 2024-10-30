@@ -47,7 +47,6 @@ export type NotCondition<T> = {
 };
 
 // Main where condition type
-export type WhereCondition<T> = AtLeastOne<
-    LogicalCondition<T> &
-    EntityCondition<T>
->;
+export type WhereCondition<T> =
+    | LogicalCondition<T>
+    | EntityCondition<T>;
