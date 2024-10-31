@@ -15,6 +15,9 @@ export type BooleanOperator = 'is' | 'not';
 export type LogicalOperator = 'or' | 'not';
 export type ListOperator = 'some' | 'none' | 'all';
 
+// Ordering operators
+export type OrderingOperator = 'asc' | 'desc';
+
 // Type inference for operators based on value type
 export type InferOperator<T> =
     T extends number | Date ? NumericalOperator :
