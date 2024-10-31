@@ -4,9 +4,9 @@ import { AtLeastOne, ExactlyOne, Primitive } from "./utils.types";
 
 
 // Types a condition to query on an object
-export type EntityCondition<T> = AtLeastOne<{
-    [K in keyof T]: ValueCondition<T[K]>
-}>
+export type EntityCondition<T> = {
+    [K in keyof T]?: ValueCondition<T[K]>
+}
 
 // Types a condition to query on a value
 export type ValueCondition<V> =
@@ -28,7 +28,7 @@ export type ListCondition<T> = ExactlyOne<{
 }>
 
 // Logical condition composition
-export type LogicalCondition<T> = OrCondition<T> | NotCondition<T>;
+export type LogicalCondition<T> = OrCondition<T> & NotCondition<T>;
 
 // OR requires exactly two subconditions
 export type OrCondition<T> = {
@@ -41,9 +41,7 @@ export type NotCondition<T> = {
 };
 
 // Main where condition type
-export type WhereCondition<T> =
-    | LogicalCondition<T>
-    | EntityCondition<T>;
+export type WhereCondition<T> = Partial<LogicalCondition<T> & EntityCondition<T>>;
 
 // Embeds WhereCondition in a where clause
 export type WhereClause<T> = {
