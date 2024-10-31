@@ -50,6 +50,78 @@ const selection: Selection<User> = {
 }
 ```
 
+## Ordering types
+
+Ordering types are the building blocks for typing an `orderBy` clause.
+
+Ordering types take a generic argument from which they can extract the fields usable for sorting.
+
+The extracted fields must be associated to an `OrderByOperator`, i.e. `asc | desc`.
+
+They allow ordering by relational fields and nested entities.
+
+They also allow hierarchical ordering when provided with a list of ordering statements.
+
+They don't allow ordering by array fields.
+
+### Ordering
+
+- An ordering query can be built using any of the entity's primitive field associated to an `OrderByOperator`
+- An ordering query can be built using any of the entity's nested objects fields associated to a nested `Ordering` query object
+- An ordering query cannot be built using array fields, either they contain primitive or objects
+
+Examples:
+```typescript
+let orderBy: Ordering<User>;
+
+orderBy = {
+    id: 'asc'
+};
+
+orderBy = {
+    firstname: 'desc'
+};
+
+orderBy = {
+    address: {
+        city: 'asc'
+    }
+};
+
+// Invalid for ordering by two fields
+orderBy = {
+    firstname: 'desc'
+}
+
+// Invalid for ordering by arrays
+orderBy = {
+    id: 'asc',
+    grades: 'asc'
+};
+
+orderBy = {
+    todos: {
+        titles: 'desc'
+    }
+};
+```
+
+### Hierarchical Ordering
+
+- An hierarchical ordering can be built by providing a list of `Ordering` query object
+- Consecutive ordering statements will be used in the order of the list if two compared primitives have the same value
+
+Examples:
+```typescript
+let orderBy: HierarchicalOrdering<User>;
+
+orderBy = [
+    { id: 'asc'},                 // Order by id
+    { firstname: 'desc' },        // then by firstname
+    { address: { city: 'asc' } }  // then by address' city
+];
+```
+
 
 ## Condition types
 
