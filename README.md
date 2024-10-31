@@ -12,43 +12,7 @@ Selection type is the building blocks for typing a `select` clause.
 
 It also allows to build sub-selections on nested entities and flat arrays contained in the main object.
 
-It doesn't allow direct selections on nested arrays, those cases should be handled by flat arrays of objects containing flat arrays themselves.
-
-Examples: 
-
-```typescript
-interface User {
-    id: number
-    firstname: string,
-    address: Address,
-    grades: number[],
-    todos: Todo[],
-};
-
-interface Address {
-    streetNumber: number,
-    streetName: string,
-    zipcode: number,
-    city: string
-};
-
-interface Todo {
-    title: string
-    ratings: number[]
-}
-
-const selection: Selection<User> = {
-    id: true,              // Direct field selection
-    address: {
-        zipcode: true      // Nested object direct field selection
-    },
-    grades: true,          // Flat array direct field selection
-    todos: {
-        title: true,       // Flat array of nested object field direct selection
-        ratings: true      // Nested array indirect selection
-    }
-}
-```
+More details and examples in the [selecting](https://github.com/VictorFouquet/TypedQueryTS/wiki/Selecting) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Ordering types
 
@@ -64,63 +28,7 @@ They also allow hierarchical ordering when provided with a list of ordering stat
 
 They don't allow ordering by array fields.
 
-### Ordering
-
-- An ordering query can be built using any of the entity's primitive field associated to an `OrderByOperator`
-- An ordering query can be built using any of the entity's nested objects fields associated to a nested `Ordering` query object
-- An ordering query cannot be built using array fields, either they contain primitive or objects
-
-Examples:
-```typescript
-let orderBy: Ordering<User>;
-
-orderBy = {
-    id: 'asc'
-};
-
-orderBy = {
-    firstname: 'desc'
-};
-
-orderBy = {
-    address: {
-        city: 'asc'
-    }
-};
-
-// Invalid for ordering by two fields
-orderBy = {
-    id: 'asc',
-    firstname: 'desc'
-}
-
-// Invalid for ordering by arrays
-orderBy = {
-    grades: 'asc'
-};
-
-orderBy = {
-    todos: {
-        titles: 'desc'
-    }
-};
-```
-
-### Hierarchical Ordering
-
-- An hierarchical ordering can be built by providing a list of `Ordering` query object
-- Consecutive ordering statements will be used in the order of the list if two compared primitives have the same value
-
-Examples:
-```typescript
-let orderBy: HierarchicalOrdering<User>;
-
-orderBy = [
-    { id: 'asc'},                 // Order by id
-    { firstname: 'desc' },        // then by firstname
-    { address: { city: 'asc' } }  // then by address' city
-];
-```
+More details and examples in the [ordering](https://github.com/VictorFouquet/TypedQueryTS/wiki/Ordering) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Condition types
 
@@ -134,7 +42,7 @@ Logical operations `or` and `not` can be implemented at the condition's root lev
 
 By default, the association of fields inside the condition object is set to a logical `and`.
 
-More details in the [condition](https://github.com/VictorFouquet/TypedQueryTS/wiki/Conditions) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
+More details and examples in the [condition](https://github.com/VictorFouquet/TypedQueryTS/wiki/Conditions) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Operation types
 
@@ -150,7 +58,7 @@ Same for an operation that queries a `number` that is both `eq` to and `lt`, or 
 
 Same for an operation that queries a `Date` that is both `gte` an other date and `lt` a number.
 
-More details in the [operation](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operations) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
+More details and examples in the [operation](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operations) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Operator types
 
@@ -158,10 +66,10 @@ The library provides different `Operators` to help implement the logic when buil
 
 They define the actions that are currently supported by the query type system.
 
-More details about these types rules in the [Operator](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operator) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
+More details and examples in the [operator](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operator) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Helper types
 
 The library provides different shared helper types to ease the building of queries by not redefining the same constraints several times.
 
-More details about these types rules in the [helper type](https://github.com/VictorFouquet/TypedQueryTS/wiki/Helper-types) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
+More details and examples in the [helper](https://github.com/VictorFouquet/TypedQueryTS/wiki/Helper-types) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
