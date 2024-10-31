@@ -387,18 +387,9 @@ condition = {
 
 The library provides different `Operators` to help implement the logic when building a query.
 
-- `eq` : Equality operator as `EqualityOp`, can be used for any primitive besides `boolean`
-- `lt | lte`: Lower bound operators as `LowerOp`, can be used for `number` and `Date`
-- `gt | gte`: Upper bound operators as `UpperOp`, can be used for `number` and `Date`
-- `eq | gt | gte | lt | lte`: Numerical operators as `NumericalOperator`, can be used for `number` and `Date`
-- `eq | contains | startswith | endswith`: Literal operators as `LiteralOperator`, can be used for `string`
-- `is | not`: Boolean operators, as `BooleanOperator`, can be used for `boolean`
-- `some | all | none`: Array operators as `ListOperator`, can be used for array with any element type
-- `not | or`: Logical operators as `LogicalOperator`, can be used for a sub query object
+They define the actions that are currently supported by the query type system.
 
-An operator util type to infer the value of an operator from the type of a target value is provided as `InferOperator<T>`.
-
-This util type enforces the previously described operator-value constraints.
+More details about these types rules in the [helper type](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operator) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Operation types
 
