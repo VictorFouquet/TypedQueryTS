@@ -90,12 +90,12 @@ orderBy = {
 
 // Invalid for ordering by two fields
 orderBy = {
+    id: 'asc',
     firstname: 'desc'
 }
 
 // Invalid for ordering by arrays
 orderBy = {
-    id: 'asc',
     grades: 'asc'
 };
 
@@ -480,14 +480,6 @@ operation = { "is": true, "not": false };
 
 ## Helper types
 
-The library provides different helper types
+The library provides different shared helper types to ease the building of queries by not redefining the same constraints several times.
 
-### Structural constraint types
-
-- `AtLeastOne<T>` ensures at least one field of type T is contained in an object
-- `ExactlyOne<T>` ensures an object has exactly one field and this field must be a field contained in type T
-
-### Data extraction types
-
-- `EntityScalarKeys<T>` extracts all the fields of a type T whose value is a scalar as a string union
-- `EntityListKeys<T>` extracts all the fields of a type T whose value is an array as a string union
+More details about these types rules in the [helper type](https://github.com/VictorFouquet/TypedQueryTS/wiki/Helper-types) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
