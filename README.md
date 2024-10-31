@@ -389,7 +389,7 @@ The library provides different `Operators` to help implement the logic when buil
 
 They define the actions that are currently supported by the query type system.
 
-More details about these types rules in the [helper type](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operator) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
+More details about these types rules in the [Operator](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operator) section of the [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
 ## Operation types
 
@@ -405,69 +405,8 @@ Same for an operation that queries a `number` that is both `eq` to and `lt`, or 
 
 Same for an operation that queries a `Date` that is both `gte` an other date and `lt` a number.
 
-### Operation business rules
+More details in the [operations](https://github.com/VictorFouquet/TypedQueryTS/wiki/Operations) section [documentation](https://github.com/VictorFouquet/TypedQueryTS/wiki).
 
-#### Numerical operations
-
-- A numerical operation allows to combine a numerical operator to a `number` or a `Date`
-- A numerical operation can contain a single numerical operator
-- A combination of two numerical operators can be associated to either two `number` or two `Date` to create a doubly bounded range query
-- A combination of two numerical operators represents a logical `AND` association
-- If a combination is used, it must contain both a `LowerOp` and `UpperOp` operator, but can never be composed of two `LowerOp` or two `UpperOp`
-- The `eq` operator can only be used alone and cannot be associated to another numerical operator.
-
-Examples
-
-```typescript
-let operation: NumericalOperation;
-operation = { "eq":  0 };            // Valid strict equality
-operation = { "gte": 0 };            // Valid range with one bound
-operation = { "gt":  0, "lte": 10 }; // Valid range with upper and lower bounds
-
-// Valid though the created range would be empty as the association is AND
-operation = { "lt":  0, "gt": 10 };
-
-operation = { "eq": 0, "lt": 10 }          // Invalid for equal being exclusive
-operation = { "lt": 0, "lte": 0 }          // Invalid for combining two lower bounds
-operation = { "gt": 0, "lt": new Date() }; // Invalid for combining two different types
-```
-
-#### Literal operations
-
-- A single literal operator can be associated to a `string` value
-- Any combination of literal operators excluding `eq` can be associated to different or same `string` values
-- The `eq` operator can only be used alone and cannot be associated to another literal operator.
-
-Examples
-
-```typescript
-let operation: LiteralOperation;
-operation = { "eq":  "abc" };        // Valid strict equality
-operation = { "contains": "abc" };   // Valid single operation
-operation = {                        // Valid combination of operators
-    "startswith": "abc", 
-    "contains":   "def",
-    "endswith":   "ghi"
-};
-
-// Invalid for equal operator being exclusive
-operation = { "eq": "abc", "contains": "abc" };
-```
-
-#### Boolean operations
-
-- A Boolean operation only accepts one single operator and can be associated to a `boolean` value
-
-Examples
-
-```typescript
-let operation: BooleanOperation;
-operation = { "is":  true };         // Valid single operation
-operation = { "not": false };        // Valid single operation
-
-// Invalid for combining boolean operators
-operation = { "is": true, "not": false };
-```
 
 ## Helper types
 
