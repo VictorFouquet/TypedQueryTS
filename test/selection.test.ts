@@ -1,3 +1,4 @@
+import { expectTypeOf, test } from 'vitest';
 import { Selection } from "../src/selection.types"
 
 interface SelectionTest {
@@ -9,53 +10,60 @@ interface SelectionTest {
     arrayObj: { id: number }[]
 };
 
-function testSelection<T>(s: Selection<T>) {}
+test('Selection should be allowed on primitive fields', () => {
+    expectTypeOf({ id: true }).toMatchTypeOf<Selection<SelectionTest>>();
+    
+    expectTypeOf(
+        { id: true, name: true, createdAt: true }
+    ).toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-it('Selection should be allowed on primitive fields', () => {
-    expect(_ => testSelection<SelectionTest>({ id: true }));
-    expect(_ => testSelection<SelectionTest>({ id: true, name: true, createdAt: true }));
-})
+test('Selection should be allowed on nested object fields', () => {
+    expectTypeOf(
+        { obj: { name: true } }
+    ).toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-it('Selection should be allowed on nested object fields', () => {
-    expect(_ => testSelection<SelectionTest>({ obj: { name: true } }));
-})
+test('Selection should be allowed on primitive array fields', () => {
+    expectTypeOf({ arrayNum: true }).toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-it('Selection should be allowed on primitive array fields', () => {
-    expect(_ => testSelection<SelectionTest>({ arrayNum: true }));
-})
+test('Selection should be allowed on nested object array fields', () => {
+    expectTypeOf({ arrayObj: { id: true } }).toMatchTypeOf<Selection<SelectionTest>>();
+    expectTypeOf({ obj: { arrayNum: true } }).toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-it('Selection should be allowed on nested object array fields', () => {
-    expect(_ => testSelection<SelectionTest>({ arrayObj: { id: true } }));
-    expect(_ => testSelection<SelectionTest>({ obj: { arrayNum: true } }));
-})
+test('Selection should be forbidden on nested object', () => {
+    expectTypeOf({ obj: true }).not.toMatchTypeOf<Selection<SelectionTest>>();
+    expectTypeOf({ arrayObj: true }).not.toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-// Invalid for directly selecting nested objects
+test('Selection should be forbidden if empty', () => {
+    expectTypeOf({ }).not.toMatchTypeOf<Selection<SelectionTest>>();
+});
 
-// @ts-expect-error
-testSelection<SelectionTest>({ obj: true });
-// @ts-expect-error
-testSelection<SelectionTest>({ arrayObj: true });
+test('Selection should be forbidden on nested arrays', () => {
+    interface InvalidNestedArray {
+        id: number,
+        arrayNum: number[][]
+        obj: { name: string, arrayNum: number[][] }
+        arrayObj: { id: number }[][]
+    };
 
+    expectTypeOf(
+        { arrayNum: true }
+    ).not.toMatchTypeOf<Selection<InvalidNestedArray>>();
+    
+    expectTypeOf(
+        { obj: { arrayNum: true } }
+    ).not.toMatchTypeOf<Selection<InvalidNestedArray>>();
+    
+    expectTypeOf(
+        { arrayObj: true }
+    ).not.toMatchTypeOf<Selection<InvalidNestedArray>>();
+    
+    expectTypeOf(
+        { arrayObj: { id: true } }
+    ).not.toMatchTypeOf<Selection<InvalidNestedArray>>();
+});
 
-// Invalid for emptyness
-
-// @ts-expect-error
-testSelection<SelectionTest>({ });
-
-// Invalid for deep nesting arrays
-
-interface InvalidNestedArray {
-    id: number,
-    arrayNum: number[][]
-    obj: { name: string, arrayNum: number[][] }
-    arrayObj: { id: number }[][]
-};
-
-// @ts-expect-error
-testSelection<InvalidNestedArray>({ arrayNum: true });
-// @ts-expect-error
-testSelection<InvalidNestedArray>({ obj: { arrayNum: true } });
-// @ts-expect-error
-testSelection<InvalidNestedArray>({ arrayObj: true });
-// @ts-expect-error
-testSelection<InvalidNestedArray>({ arrayObj: { id: true } });

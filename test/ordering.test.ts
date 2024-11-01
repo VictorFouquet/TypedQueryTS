@@ -1,3 +1,4 @@
+import { expectTypeOf, test } from 'vitest';
 import { HierarchicalOrdering, Ordering } from "../src/ordering.types"
 
 interface OrderingTest {
@@ -12,106 +13,99 @@ interface OrderingTest {
 
 //---------------------------------------------------------------------- Ordering
 
-function orderByTest<T>(o: Ordering<T>) {}
 
-it("Ordering should allow sorting by primitive fields", () => {
-    expect(_ => orderByTest<OrderingTest>({
-        id: 'asc'
-    }))
-    expect(_ => orderByTest<OrderingTest>({
-        name: 'asc'
-    }))
-    expect(_ => orderByTest<OrderingTest>({
-        createdAt: 'asc'
-    }))
+test("Ordering should allow sorting by primitive fields", () => {
+    expectTypeOf<{ id: 'asc' }>().toMatchTypeOf<Ordering<OrderingTest>>();
+    expectTypeOf<{ name: 'desc' }>().toMatchTypeOf<Ordering<OrderingTest>>();
+    expectTypeOf<{ createdAt: 'asc' }>().toMatchTypeOf<Ordering<OrderingTest>>();
 });
 
-it("Ordering should allow sorting by nested object fields", () => {
-    expect(_ => orderByTest<OrderingTest>({
+test("Ordering should allow sorting by nested object fields", () => {
+    expectTypeOf<{
         obj: { name: 'asc' }
-    }));
+    }>().toMatchTypeOf<Ordering<OrderingTest>>();
 
-    expect(_ => orderByTest<OrderingTest>({
+    expectTypeOf<{
         obj: { id: 'desc' }
-    }));
+    }>().toMatchTypeOf<Ordering<OrderingTest>>();
 });
 
-// Invalid for ordering by two primitive at same level
+test("Ordering should forbid sorting by several fields in same level", () => {
+    expectTypeOf<
+        { id: "asc", name: "asc" }
+    >().not.toMatchTypeOf<Ordering<OrderingTest>>();
 
-// @ts-expect-error
-orderByTest<OrderingTest>({ id: "asc", name: "asc" });
+    expectTypeOf<
+        { obj: { name: 'asc', id: 'desc' } }
+    >().not.toMatchTypeOf<Ordering<OrderingTest>>();
 
+    expectTypeOf<
+        { obj: { name: 'asc' }, id: 'desc' }
+    >().not.toMatchTypeOf<Ordering<OrderingTest>>();
+});
 
-// Invalid for providing a hierarchical orderBy argument
+test("Ordering should forbid providing a hierarchical orderBy argument", () => {
+    expectTypeOf<
+        [ { id: "asc" }, { name: "asc" } ]
+    >().not.toMatchTypeOf<Ordering<OrderingTest>>();
 
-// @ts-expect-error
-orderByTest<OrderingTest>([ { id: "asc" }, { name: "asc" } ]);
+    expectTypeOf<
+        [ { obj: { id: "asc" } }, { obj: { name: "asc" } }]
+    >().not.toMatchTypeOf<Ordering<OrderingTest>>();
+});
 
+test("Ordering should forbid sorting based on a nested array", () => {
+    expectTypeOf<{ arrayNum: 'asc' }>().not.toMatchTypeOf<Ordering<OrderingTest>>();
 
-// Invalid for ordering by two primitive at same level
+    expectTypeOf<{ arrayObj: 'asc' }>().not.toMatchTypeOf<Ordering<OrderingTest>>();
 
-// @ts-expect-error
-orderByTest<OrderingTest>({ obj: { name: 'asc', id: 'desc' } });
-// @ts-expect-error
-orderByTest<OrderingTest>({ obj: { name: 'asc' }, id: 'desc' });
+    expectTypeOf<{ arrayObj: { id: 'asc' } }>().not.toMatchTypeOf<Ordering<OrderingTest>>();
+});
 
-
-// Invalid for providing a hierarchical orderBy argument
-
-// @ts-expect-error
-orderByTest<OrderingTest>([ { obj: { id: "asc" } }, { obj: { name: "asc" } }]);
-
-
-// Invalid for ordering by an array field
-
-// @ts-expect-error
-orderByTest<OrderingTest>({ arrayNum: 'asc' });
-// @ts-expect-error
-orderByTest<OrderingTest>({ arrayObj: 'asc' });
-// @ts-expect-error
-orderByTest<OrderingTest>({ arrayObj: { id: 'asc' } });
 
 //---------------------------------------------------------------------- HierarchicalOrdering
 
 function hierarchicalOrderByTest<T>(o: HierarchicalOrdering<T>) {};
 
-it("HierarchicalOrdering should allow hierarchical sorting by primitive fields", () => {
-    expect(_ => hierarchicalOrderByTest<OrderingTest>([
+test("HierarchicalOrdering should allow hierarchical sorting by primitive fields", () => {
+    expectTypeOf<[
         { id: 'asc' },
         { name: 'desc' },
         { createdAt: 'asc' }
-    ]));
+    ]>().toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
 });
 
-it("HierarchicalOrdering should allow hierarchical sorting by nested object fields", () => {
-    expect(_ => hierarchicalOrderByTest<OrderingTest>([
+test("HierarchicalOrdering should allow hierarchical sorting by nested object fields", () => {
+    expectTypeOf<[
         { obj: { id: "asc" } },
         { obj: { name: "desc" } }
-    ]));
+    ]>().toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
 });
 
-it("HierarchicalOrdering should allow hierarchical sorting by combined primitive and nested object fields", () => {
-    expect(_ => hierarchicalOrderByTest<OrderingTest>([
+test("HierarchicalOrdering should allow hierarchical sorting by combined primitive and nested object fields", () => {
+    expectTypeOf<[
         { id: 'asc' },
         { name: 'desc' },
         { createdAt: 'asc' },
         { obj: { id: "desc" } },
         { obj: { name: "asc" } }
-    ]));
+    ]>().toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
 });
 
+test("HierarchicalOrdering should forbid providing a Ordering argument", () => {
+    expectTypeOf<{ id: "asc" }>().not.toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
+});
 
-// Invalid for providing a orderBy argument
+test("HierarchicalOrdering should forbid sorting by array fields", () => {
+    expectTypeOf<
+        [ { arrayNum: 'asc' }, { id: 'asc' } ]
+    >().not.toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
 
-// @ts-expect-error
-hierarchicalOrderByTest<OrderingTest>({ id: "asc" });
+    expectTypeOf<
+        [ { arrayObj: 'asc' }, { id: 'asc' } ]
+    >().not.toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
 
-
-// Invalid for hierarchically ordering by an array field
-
-// @ts-expect-error
-hierarchicalOrderByTest<OrderingTest>([ { arrayNum: 'asc' }, { id: 'asc' } ]);
-// @ts-expect-error
-hierarchicalOrderByTest<OrderingTest>([ { arrayObj: 'asc' }, { id: 'asc' } ]);
-// @ts-expect-error
-hierarchicalOrderByTest<OrderingTest>([ { arrayObj: { id: 'asc' } }, { id: 'asc' } ]);
+    expectTypeOf<
+        [ { arrayObj: { id: 'asc' } }, { id: 'asc' } ]
+    >().not.toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
+});

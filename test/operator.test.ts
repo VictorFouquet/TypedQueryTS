@@ -1,430 +1,348 @@
-import { BooleanOperator, EqualityOp, InferOperator, ListOperator, LiteralOperator, LogicalOperator, LowerOp, NumericalOperator, UpperOp } from "../src/operator.types"
+import { expectTypeOf, test } from 'vitest';
+import { LogicalOperator, EqualityOp, InferOperator, ListOperator, LiteralOperator, BooleanOperator, LowerOp, NumericalOperator, UpperOp, OrderingOperator } from "../src/operator.types"
+
 
 //---------------------------------------------------------------------- Equality Operator
 
-function testEqualityOp(op: EqualityOp): void {}
-
 test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testEqualityOp("eq")).not.toThrow();
-})
+    expectTypeOf<"eq">().toMatchTypeOf<EqualityOp>();
+});
 
-// EqualityOp should throw for any other value than 'eq'
-// @ts-expect-error
-testEqualityOp("lt")
-// @ts-expect-error
-testEqualityOp("gt")
-// @ts-expect-error
-testEqualityOp("lte")
-// @ts-expect-error
-testEqualityOp("gte")
-// @ts-expect-error
-testEqualityOp("contains")
-// @ts-expect-error
-testEqualityOp("startswith")
-// @ts-expect-error
-testEqualityOp("endswith")
-// @ts-expect-error
-testEqualityOp("some")
-// @ts-expect-error
-testEqualityOp("all")
-// @ts-expect-error
-testEqualityOp("none")
-// @ts-expect-error
-testEqualityOp("or")
-// @ts-expect-error
-testEqualityOp("not")
-// @ts-expect-error
-testEqualityOp("is")
-// @ts-expect-error
-testEqualityOp("whatever")
+test('EqualityOp should forbid any other operator', () => {
+    expectTypeOf<"lt">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"some">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"none">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"all">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"is">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"not">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"or">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<EqualityOp>();
+});
+
 
 //---------------------------------------------------------------------- LowerOp
 
-function testLowerOp(op: LowerOp): void {}
 
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testLowerOp("lt")).not.toThrow();
-    expect(_ => testLowerOp("lte")).not.toThrow();
+test('LowerOp should allow "lt" and "lte" operators', () => {
+    expectTypeOf<"lt">().toMatchTypeOf<LowerOp>();
+    expectTypeOf<"lte">().toMatchTypeOf<LowerOp>();
 })
 
-// LowerOp should throw for any other value than 'lt' or 'lte'
-// @ts-expect-error
-testLowerOp("eq")
-// @ts-expect-error
-testLowerOp("gt")
-// @ts-expect-error
-testLowerOp("gte")
-// @ts-expect-error
-testLowerOp("contains")
-// @ts-expect-error
-testLowerOp("startswith")
-// @ts-expect-error
-testLowerOp("endswith")
-// @ts-expect-error
-testLowerOp("some")
-// @ts-expect-error
-testLowerOp("all")
-// @ts-expect-error
-testLowerOp("none")
-// @ts-expect-error
-testLowerOp("or")
-// @ts-expect-error
-testLowerOp("not")
-// @ts-expect-error
-testLowerOp("is")
-// @ts-expect-error
-testLowerOp("whatever")
+test('LowerOp should forbid any other operator than "lt" and "lte"', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"some">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"none">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"all">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"is">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"not">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"or">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<LowerOp>();
+});
+
 
 //---------------------------------------------------------------------- UpperOp
 
-function testUpperOp(op: UpperOp): void {}
-
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testUpperOp("gt")).not.toThrow();
-    expect(_ => testUpperOp("gte")).not.toThrow();
+test('UpperOp should allow "gt" and "gte" operators', () => {
+    expectTypeOf<"gt">().toMatchTypeOf<UpperOp>();
+    expectTypeOf<"gte">().toMatchTypeOf<UpperOp>();
 })
 
-// UpperOp should throw for any other value than 'gt' or 'gte'
-// @ts-expect-error
-testUpperOp("eq")
-// @ts-expect-error
-testUpperOp("lt")
-// @ts-expect-error
-testUpperOp("lte")
-// @ts-expect-error
-testLowerOp("contains")
-// @ts-expect-error
-testLowerOp("startswith")
-// @ts-expect-error
-testLowerOp("endswith")
-// @ts-expect-error
-testUpperOp("some")
-// @ts-expect-error
-testUpperOp("all")
-// @ts-expect-error
-testUpperOp("none")
-// @ts-expect-error
-testUpperOp("or")
-// @ts-expect-error
-testUpperOp("not")
-// @ts-expect-error
-testUpperOp("is")
-// @ts-expect-error
-testUpperOp("whatever")
+test('UpperOp should forbid any other operator than "gt" and "gte"', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"some">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"none">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"all">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"is">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"not">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"or">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<UpperOp>();
+});
+
 
 //---------------------------------------------------------------------- NumericalOperator
 
-function testNumericalOperator(op: NumericalOperator): void {}
-
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testNumericalOperator("eq")).not.toThrow();
-    expect(_ => testNumericalOperator("gt")).not.toThrow();
-    expect(_ => testNumericalOperator("gte")).not.toThrow();
-    expect(_ => testNumericalOperator("lt")).not.toThrow();
-    expect(_ => testNumericalOperator("lte")).not.toThrow();
+test('NumericalOperator should allow "gt" and "gte" operators', () => {
+    expectTypeOf<"eq">().toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"gt">().toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"gte">().toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"lt">().toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"lte">().toMatchTypeOf<NumericalOperator>();
 })
 
-// NumericalOperator should throw for any other value than 'eq', 'gt', 'gte', 'lt', 'lte' 
-// @ts-expect-error
-testNumericalOperator("contains")
-// @ts-expect-error
-testNumericalOperator("startswith")
-// @ts-expect-error
-testNumericalOperator("endswith")
-// @ts-expect-error
-testNumericalOperator("some")
-// @ts-expect-error
-testNumericalOperator("all")
-// @ts-expect-error
-testNumericalOperator("none")
-// @ts-expect-error
-testNumericalOperator("or")
-// @ts-expect-error
-testNumericalOperator("not")
-// @ts-expect-error
-testNumericalOperator("is")
-// @ts-expect-error
-testNumericalOperator("whatever")
+test('NumericalOperator should forbid any other operator than "gt" and "gte"', () => {    
+    expectTypeOf<"contains">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"some">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"all">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"is">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"not">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"or">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<NumericalOperator>();
+});
+
 
 //---------------------------------------------------------------------- LiteralOperator
 
-function testLiteralOperator(op: LiteralOperator): void {}
+test('LiteralOperator should allow "eq", "contains", "startswith" and "endswith" operators', () => {
+    expectTypeOf<"eq">().toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"contains">().toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"startswith">().toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"endswith">().toMatchTypeOf<LiteralOperator>();
+});
 
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testLiteralOperator("eq")).not.toThrow();
-    expect(_ => testLiteralOperator("contains")).not.toThrow();
-    expect(_ => testLiteralOperator("startswith")).not.toThrow();
-    expect(_ => testLiteralOperator("endswith")).not.toThrow();
-})
+test('LiteralOperator should forbid any other operator', () => {
+    expectTypeOf<"lt">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"some">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"all">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"is">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"not">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"or">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<LiteralOperator>();
+});
 
-// LiteralOperator should throw for any other value than 'eq', 'contains', 'startswit', 'endswith'
-// @ts-expect-error
-testLiteralOperator("lt")
-// @ts-expect-error
-testLiteralOperator("lte")
-// @ts-expect-error
-testLiteralOperator("gt")
-// @ts-expect-error
-testLiteralOperator("gte")
-// @ts-expect-error
-testLiteralOperator("some")
-// @ts-expect-error
-testLiteralOperator("all")
-// @ts-expect-error
-testLiteralOperator("none")
-// @ts-expect-error
-testLiteralOperator("or")
-// @ts-expect-error
-testLiteralOperator("not")
-// @ts-expect-error
-testLiteralOperator("is")
-// @ts-expect-error
-testLiteralOperator("whatever")
 
 //---------------------------------------------------------------------- BooleanOperator
 
-function testBooleanOperator(op: BooleanOperator): void {}
+test('BooleanOperator should allow "is" and "not" operators', () => {
+    expectTypeOf<"is">().toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"not">().toMatchTypeOf<BooleanOperator>();
+});
 
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testBooleanOperator("is")).not.toThrow();
-    expect(_ => testBooleanOperator("not")).not.toThrow();
-})
+test('BooleanOperator should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"some">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"or">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<BooleanOperator>();
+});
 
-// BooleanOperator should throw for any other value than 'is' or 'not'
-// @ts-expect-error
-testBooleanOperator("eq")
-// @ts-expect-error
-testBooleanOperator("lt")
-// @ts-expect-error
-testBooleanOperator("lte")
-// @ts-expect-error
-testBooleanOperator("gt")
-// @ts-expect-error
-testBooleanOperator("gte")
-// @ts-expect-error
-testNumericalOperator("contains")
-// @ts-expect-error
-testNumericalOperator("startswith")
-// @ts-expect-error
-testNumericalOperator("endswith")
-// @ts-expect-error
-testBooleanOperator("some")
-// @ts-expect-error
-testBooleanOperator("all")
-// @ts-expect-error
-testBooleanOperator("none")
-// @ts-expect-error
-testBooleanOperator("or")
-// @ts-expect-error
-testBooleanOperator("whatever")
 
 //---------------------------------------------------------------------- LogicalOperator
 
-function testLogicalOperator(op: LogicalOperator): void {}
+test('LogicalOperator should allow "or" and "not" operators', () => {
+    expectTypeOf<"or">().toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"not">().toMatchTypeOf<LogicalOperator>();
+});
 
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testLogicalOperator("or")).not.toThrow();
-    expect(_ => testLogicalOperator("not")).not.toThrow();
-})
+test('LogicalOperator should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"some">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"all">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"is">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<LogicalOperator>();
+});
 
-// LogicalOperator should throw for any other value than 'or' or 'not'
-// @ts-expect-error
-testLogicalOperator("eq")
-// @ts-expect-error
-testLogicalOperator("lt")
-// @ts-expect-error
-testLogicalOperator("lte")
-// @ts-expect-error
-testLogicalOperator("gt")
-// @ts-expect-error
-testLogicalOperator("gte")
-// @ts-expect-error
-testLogicalOperator("contains")
-// @ts-expect-error
-testLogicalOperator("startswith")
-// @ts-expect-error
-testLogicalOperator("endswith")
-// @ts-expect-error
-testLogicalOperator("some")
-// @ts-expect-error
-testLogicalOperator("all")
-// @ts-expect-error
-testLogicalOperator("none")
-// @ts-expect-error
-testLogicalOperator("is")
-// @ts-expect-error
-testLogicalOperator("whatever")
 
 //---------------------------------------------------------------------- ListOperator
 
-function testListOperator(op: ListOperator): void {}
+test('ListOperator should allow "some", "none" and "all" operators', () => {
+    expectTypeOf<"some">().toMatchTypeOf<ListOperator>();
+    expectTypeOf<"none">().toMatchTypeOf<ListOperator>();
+    expectTypeOf<"all">().toMatchTypeOf<ListOperator>();
+});
 
-test('EqualityOp should allow "eq" operator', () => {
-    expect(_ => testListOperator("some")).not.toThrow();
-    expect(_ => testListOperator("none")).not.toThrow();
-    expect(_ => testListOperator("all")).not.toThrow();
-})
+test('ListOperator should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"is">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"not">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"or">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<ListOperator>();
+});
 
-// ListOperator should throw for any other value than 'some', 'none' or 'all'
-// @ts-expect-error
-testListOperator("eq")
-// @ts-expect-error
-testListOperator("lt")
-// @ts-expect-error
-testListOperator("lte")
-// @ts-expect-error
-testListOperator("gt")
-// @ts-expect-error
-testListOperator("gte")
-// @ts-expect-error
-testListOperator("contains")
-// @ts-expect-error
-testListOperator("startswith")
-// @ts-expect-error
-testListOperator("endswith")
-// @ts-expect-error
-testListOperator("is")
-// @ts-expect-error
-testListOperator("or")
-// @ts-expect-error
-testListOperator("not")
-// @ts-expect-error
-testListOperator("whatever")
+
+//---------------------------------------------------------------------- OrderingOperator
+
+test('OrderingOperator should allow "asc" and "desc" operators', () => { 
+    expectTypeOf<"asc">().toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"desc">().toMatchTypeOf<OrderingOperator>();
+});
+
+test('OrderingOperator should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"some">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"none">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"all">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"is">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"not">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"or">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"whatever">().not.toMatchTypeOf<OrderingOperator>();
+});
+
 
 //---------------------------------------------------------------------- InferOperator
 
 function testInferOperator<T>(v: InferOperator<T>): void {}
 
 test('InferOperator<number> should allow NumericalOperator', () => {
-    expect(_ => testInferOperator<number>("eq")).not.toThrow();
-    expect(_ => testInferOperator<number>("lt")).not.toThrow();
-    expect(_ => testInferOperator<number>("lte")).not.toThrow();
-    expect(_ => testInferOperator<number>("gt")).not.toThrow();
-    expect(_ => testInferOperator<number>("gte")).not.toThrow();
-})
+    expectTypeOf<"eq">().toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"lt">().toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"lte">().toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"gt">().toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"gte">().toMatchTypeOf<InferOperator<number>>();
+});
 
-// @ts-expect-error
-testInferOperator<number>("contains");
-// @ts-expect-error
-testInferOperator<number>("startswith");
-// @ts-expect-error
-testInferOperator<number>("endswith");
-// @ts-expect-error
-testInferOperator<number>("is");
-// @ts-expect-error
-testInferOperator<number>("not");
-// @ts-expect-error
-testInferOperator<number>("some");
-// @ts-expect-error
-testInferOperator<number>("all");
-// @ts-expect-error
-testInferOperator<number>("none");
-
+test('InferOperator<number> should forbid any other operator', () => {
+    expectTypeOf<"contains">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<number>>();
+});
 
 test('InferOperator<Date> should allow NumericalOperator', () => {
-    expect(_ => testInferOperator<Date>("eq")).not.toThrow();
-    expect(_ => testInferOperator<Date>("lt")).not.toThrow();
-    expect(_ => testInferOperator<Date>("lte")).not.toThrow();
-    expect(_ => testInferOperator<Date>("gt")).not.toThrow();
-    expect(_ => testInferOperator<Date>("gte")).not.toThrow();
+    expectTypeOf<"eq">().toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"lt">().toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"lte">().toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"gt">().toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"gte">().toMatchTypeOf<InferOperator<Date>>();
 })
 
-// @ts-expect-error
-testInferOperator<Date>("contains");
-// @ts-expect-error
-testInferOperator<Date>("startswith");
-// @ts-expect-error
-testInferOperator<Date>("endswith");
-// @ts-expect-error
-testInferOperator<Date>("is");
-// @ts-expect-error
-testInferOperator<Date>("not");
-// @ts-expect-error
-testInferOperator<Date>("some");
-// @ts-expect-error
-testInferOperator<Date>("all");
-// @ts-expect-error
-testInferOperator<Dateboolean>("none");
+test('InferOperator<Date> should forbid any other operator', () => {
+    expectTypeOf<"contains">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<Date>>();
+});
 
 
 test('InferOperator<string> should allow LiteralOperator', () => {
-    expect(_ => testInferOperator<string>("eq")).not.toThrow();
-    expect(_ => testInferOperator<string>("contains")).not.toThrow();
-    expect(_ => testInferOperator<string>("startswith")).not.toThrow();
-    expect(_ => testInferOperator<string>("endswith")).not.toThrow();
+    expectTypeOf<"eq">().toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"contains">().toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"startswith">().toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"endswith">().toMatchTypeOf<InferOperator<string>>();
 })
 
-// @ts-expect-error
-testInferOperator<string>("lt");
-// @ts-expect-error
-testInferOperator<string>("lte");
-// @ts-expect-error
-testInferOperator<string>("gt");
-// @ts-expect-error
-testInferOperator<string>("gte");
-// @ts-expect-error
-testInferOperator<string>("is");
-// @ts-expect-error
-testInferOperator<string>("not");
-// @ts-expect-error
-testInferOperator<string>("some");
-// @ts-expect-error
-testInferOperator<string>("all");
-// @ts-expect-error
-testInferOperator<string>("none");
+test('InferOperator<string> should forbid any other operator', () => {
+    expectTypeOf<"lt">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<string>>();
+});
 
-
-test('InferOperator<boolean> should allow BooleanOperator', () => {
-    expect(_ => testInferOperator<boolean>("is")).not.toThrow();
-    expect(_ => testInferOperator<boolean>("not")).not.toThrow();
+test('InferOperator<boolean> should allow LiteralOperator', () => {
+    expectTypeOf<"is">().toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"not">().toMatchTypeOf<InferOperator<boolean>>();
 })
 
-// @ts-expect-error
-testInferOperator<boolean>("eq");
-// @ts-expect-error
-testInferOperator<boolean>("lt");
-// @ts-expect-error
-testInferOperator<boolean>("lte");
-// @ts-expect-error
-testInferOperator<boolean>("gt");
-// @ts-expect-error
-testInferOperator<boolean>("gte");
-// @ts-expect-error
-testInferOperator<boolean>("contains");
-// @ts-expect-error
-testInferOperator<boolean>("startswith");
-// @ts-expect-error
-testInferOperator<boolean>("endswith");
-// @ts-expect-error
-testInferOperator<boolean>("some");
-// @ts-expect-error
-testInferOperator<boolean>("all");
-// @ts-expect-error
-testInferOperator<boolean>("none");
+test('InferOperator<boolean> should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<boolean>>();
+});
 
-test('InferOperator<any[]> should allow ListOperator', () => {
-    expect(_ => testInferOperator<any[]>("some")).not.toThrow();
-    expect(_ => testInferOperator<any[]>("none")).not.toThrow();
-    expect(_ => testInferOperator<any[]>("all")).not.toThrow();
+test('InferOperator<any[]> should allow LiteralOperator', () => {
+    expectTypeOf<"some">().toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"all">().toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"none">().toMatchTypeOf<InferOperator<any[]>>();
 })
 
-// @ts-expect-error
-testInferOperator<any[]>("eq");
-// @ts-expect-error
-testInferOperator<any[]>("lt");
-// @ts-expect-error
-testInferOperator<any[]>("lte");
-// @ts-expect-error
-testInferOperator<any[]>("gt");
-// @ts-expect-error
-testInferOperator<any[]>("gte");
-// @ts-expect-error
-testInferOperator<any[]>("contains");
-// @ts-expect-error
-testInferOperator<any[]>("startswith");
-// @ts-expect-error
-testInferOperator<any[]>("endswith");
-// @ts-expect-error
-testInferOperator<any[]>("is");
-// @ts-expect-error
-testInferOperator<any[]>("not");
+test('InferOperator<any[]> should forbid any other operator', () => {
+    expectTypeOf<"eq">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"lt">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"lte">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"gt">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"gte">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"contains">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"startswith">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<any[]>>();
+});

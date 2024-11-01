@@ -1,4 +1,5 @@
-import { NumericalOperator } from "../src/operator.types";
+import { expectTypeOf, test } from 'vitest';
+
 import {
     BooleanOperation,
     DoubleNumericalOperationType,
@@ -12,411 +13,309 @@ import {
 
 //---------------------------------------------------------------------- SingleNumericalOperationType
 
-function testSingleNumericalOperationType<K extends NumericalOperator>(
-    op: SingleNumericalOperationType<K, number>
-): void {}
-
 test('SingleNumericalOperationType should allow operation with only one operator', () => {
-    expect(_ => testSingleNumericalOperationType<"eq">({ "eq": 0 }));
-    expect(_ => testSingleNumericalOperationType<"lt">({ "lt": 0 }));
-    expect(_ => testSingleNumericalOperationType<"gt">({ "gt": 0 }));
-    expect(_ => testSingleNumericalOperationType<"lte">({ "lte": 0 }));
-    expect(_ => testSingleNumericalOperationType<"gte">({ "gte": 0 }));
-})
+    expectTypeOf({ "eq":  0 }).toMatchTypeOf<SingleNumericalOperationType<'eq', number>>();
+    expectTypeOf({ "lt":  0 }).toMatchTypeOf<SingleNumericalOperationType<'lt', number>>();
+    expectTypeOf({ "lte": 0 }).toMatchTypeOf<SingleNumericalOperationType<'lte', number>>();
+    expectTypeOf({ "gt":  0 }).toMatchTypeOf<SingleNumericalOperationType<'gt', number>>();
+    expectTypeOf({ "gte": 0 }).toMatchTypeOf<SingleNumericalOperationType<'gte', number>>();
+});
 
-// @ts-expect-error
-testSingleNumericalOperationType<"eq">({ "lt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"eq">({ "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"eq">({ "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"eq">({ "gte": 0 });
+test('SingleNumericalOperationType enforce constraint operator', () => {
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'eq', number>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'eq', number>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'eq', number>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'eq', number>>();
 
-// @ts-expect-error
-testSingleNumericalOperationType<"lt">({ "eq": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lt">({ "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lt">({ "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lt">({ "gte": 0 });
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lt', number>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lt', number>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lt', number>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lt', number>>();
 
-// @ts-expect-error
-testSingleNumericalOperationType<"lte">({ "eq": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lte">({ "lt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lte">({ "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"lte">({ "gte": 0 });
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lte', number>>();
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lte', number>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lte', number>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'lte', number>>();
 
-// @ts-expect-error
-testSingleNumericalOperationType<"gte">({ "eq": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"gte">({ "lt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"gte">({ "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperationType<"gte">({ "lte": 0 });
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gt', number>>();
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gt', number>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gt', number>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gt', number>>();
+
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gte', number>>();
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gte', number>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gte', number>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperationType<'gte', number>>();
+});
 
 
 //---------------------------------------------------------------------- DoubleNumericalOperationType
 
-function testDoubleNumericalOperationType<K extends NumericalOperator, KP extends NumericalOperator, V extends number|Date>(
-    op: DoubleNumericalOperationType<K, KP, V>
-): void {}
-
 test('DoubleNumericalOperationType should allow operation with exactly two operators', () => {
     // Tests for number bounds
-    expect(_ => testDoubleNumericalOperationType<"eq", "lt", number>({ "eq": 0, "lt": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "lte", number>({ "eq": 0, "lte": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "gt", number>({ "eq": 0, "gt": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "gte", number>({ "eq": 0, "gte": 0 }));
+    expectTypeOf({ "eq":  0, "lt":  0 }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  number>>();
+    expectTypeOf({ "eq":  0, "lte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lte', number>>();
+    expectTypeOf({ "eq":  0, "gt":  0 }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gt', number>>();
+    expectTypeOf({ "eq":  0, "gte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gte', number>>();
 
-    expect(_ => testDoubleNumericalOperationType<"lt", "lte", number>({ "lt": 0, "lte": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"lt", "gt", number>({ "lt": 0, "gt": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"lt", "gte", number>({ "lt": 0, "gte": 0 }));
+    expectTypeOf({ "lt":  0, "lte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'lte', number>>();
+    expectTypeOf({ "lt":  0, "gt":  0 }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gt', number>>();
+    expectTypeOf({ "lt":  0, "gte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gte', number>>();
 
-    expect(_ => testDoubleNumericalOperationType<"gt", "lte", number>({ "gt": 0, "lte": 0 }));
-    expect(_ => testDoubleNumericalOperationType<"gt", "gte", number>({ "gt": 0, "gte": 0 }));
+    expectTypeOf({ "gt":  0, "lte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'gt', 'lte', number>>();
+    expectTypeOf({ "gt":  0, "gte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'gt', 'gte', number>>();
 
-    expect(_ => testDoubleNumericalOperationType<"gte", "lte", number>({ "gte": 0, "lte": 0 }));
+    expectTypeOf({ "gte": 0, "lte": 0 }).toMatchTypeOf<DoubleNumericalOperationType<'gte', 'lte', number>>();
 
     // Tests for Date bounds
-    expect(_ => testDoubleNumericalOperationType<"eq", "lt", Date>({ "eq": new Date(), "lt": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "lte", Date>({ "eq": new Date(), "lte": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "gt", Date>({ "eq": new Date(), "gt": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"eq", "gte", Date>({ "eq": new Date(), "gte": new Date() }));
+    expectTypeOf({ "eq":  new Date(), "lt":  new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  Date>>();
+    expectTypeOf({ "eq":  new Date(), "lte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lte', Date>>();
+    expectTypeOf({ "eq":  new Date(), "gt":  new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gt', Date>>();
+    expectTypeOf({ "eq":  new Date(), "gte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gte', Date>>();
 
-    expect(_ => testDoubleNumericalOperationType<"lt", "lte", Date>({ "lt": new Date(), "lte": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"lt", "gt", Date>({ "lt": new Date(), "gt": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"lt", "gte", Date>({ "lt": new Date(), "gte": new Date() }));
+    expectTypeOf({ "lt":  new Date(), "lte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'lte', Date>>();
+    expectTypeOf({ "lt":  new Date(), "gt":  new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gt', Date>>();
+    expectTypeOf({ "lt":  new Date(), "gte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gte', Date>>();
 
-    expect(_ => testDoubleNumericalOperationType<"gt", "lte", Date>({ "gt": new Date(), "lte": new Date() }));
-    expect(_ => testDoubleNumericalOperationType<"gt", "gte", Date>({ "gt": new Date(), "gte": new Date() }));
+    expectTypeOf({ "gt":  new Date(), "lte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'gt', 'lte', Date>>();
+    expectTypeOf({ "gt":  new Date(), "gte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'gt', 'gte', Date>>();
 
-    expect(_ => testDoubleNumericalOperationType<"gte", "lte", Date>({ "gte": new Date(), "lte": new Date() }));
-})
+    expectTypeOf({ "gte": new Date(), "lte": new Date() }).toMatchTypeOf<DoubleNumericalOperationType<'gte', 'lte', Date>>();
+});
 
-// Invalid for inconsistency in provided value types
+test('DoubleNumericalOperationType should forbid operations combining different types', () => {
+    // Tests for number bounds
+    expectTypeOf({ "eq":  0, "lt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  number>>();
+    expectTypeOf({ "eq":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lte', number>>();
+    expectTypeOf({ "eq":  0, "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gt', number>>();
+    expectTypeOf({ "eq":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gte', number>>();
 
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "lt", number>({ "eq": 0, "lt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "lte", Date>({ "eq": 0, "lte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "gt", number>({ "eq": 0, "gt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "gte", Date>({ "eq": 0, "gte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"lt", "lte", number>({ "lt": 0, "lte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"lt", "gt", Date>({ "lt": 0, "gt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"lt", "gte", number>({ "lt": 0, "gte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"gt", "lte", Date>({ "gt": 0, "lte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"gt", "gte", number>({ "gt": 0, "gte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperationType<"gte", "lte", Date>({ "gte": 0, "lte": new Date() });
+    expectTypeOf({ "lt":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'lte', number>>();
+    expectTypeOf({ "lt":  0, "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gt', number>>();
+    expectTypeOf({ "lt":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gte', number>>();
 
+    expectTypeOf({ "gt":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gt', 'lte', number>>();
+    expectTypeOf({ "gt":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gt', 'gte', number>>();
 
-// Invalid for providing same key twice
+    expectTypeOf({ "gte": 0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gte', 'lte', number>>();
 
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "eq">({ "eq": 0, "eq": 0 });
-// @ts-expect-error
-testDoubleNumericalOperationType<"lt", "lt">({ "lt": 0, "lt": 0 });
-// @ts-expect-error
-testDoubleNumericalOperationType<"lte", "lte">({ "lte": 0, "lte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperationType<"gte", "gte">({ "gte": 0, "gte": 0 });
+    // Tests for Date bounds
+    expectTypeOf({ "eq":  0, "lt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  Date>>();
+    expectTypeOf({ "eq":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lte', Date>>();
+    expectTypeOf({ "eq":  0, "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gt', Date>>();
+    expectTypeOf({ "eq":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'gte', Date>>();
 
-// Should throw error if a key is not a NumericalOperator
-// @ts-expect-error
-testDoubleNumericalOperationType<"whatever", "gte">({ "whatever": 0, "gte": 0 });
+    expectTypeOf({ "lt":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'lte', Date>>();
+    expectTypeOf({ "lt":  0, "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gt', Date>>();
+    expectTypeOf({ "lt":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'lt', 'gte', Date>>();
 
-// Should throw if the provided key couple don't match
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "lt">({ "eq": 0, "lte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperationType<"eq", "lt">({ "gt": 0, "lt": 0 });
+    expectTypeOf({ "gt":  0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gt', 'lte', Date>>();
+    expectTypeOf({ "gt":  0, "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gt', 'gte', Date>>();
 
-// Should throw if none of the provided key match
-// @ts-expect-error
-testDoubleNumericalOperationType<"gt", "lt">({ "gte": 0, "lte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperationType<"gte", "lte">({ "gt": 0, "lt": 0 });
+    expectTypeOf({ "gte": 0, "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperationType<'gte', 'lte', Date>>();
+});
+
+test('DoubleNumericalOperationType should forbid non numerical operators and not specified keys', () => {
+    expectTypeOf({ "eq": 0, "lte": 0 }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  number>>();
+    expectTypeOf({ "gt": 0, "lte": 0 }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  number>>();
+    expectTypeOf({ "whatever": 0, "lt": 0 }).not.toMatchTypeOf<DoubleNumericalOperationType<'eq', 'lt',  number>>();
+});
 
 
 //---------------------------------------------------------------------- SingleNumericalOperation
 
-function testSingleNumericalOperation<T extends number|Date>(op: SingleNumericalOperations<T>): void {}
-
 test('SingleNumericalOperation should allow operation with only one operator associated to a number', () => {
-    expect(_ => testSingleNumericalOperation<number>({ "eq": 0 }));
-    expect(_ => testSingleNumericalOperation<number>({ "lt": 0 }));
-    expect(_ => testSingleNumericalOperation<number>({ "gt": 0 }));
-    expect(_ => testSingleNumericalOperation<number>({ "lte": 0 }));
-    expect(_ => testSingleNumericalOperation<number>({ "gte": 0 }));
+    expectTypeOf({ "eq":  0 }).toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  0 }).toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lte": 0 }).toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gt":  0 }).toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gte": 0 }).toMatchTypeOf<SingleNumericalOperations<number>>();
 
-    expect(_ => testSingleNumericalOperation<Date>({ "eq": new Date() }));
-    expect(_ => testSingleNumericalOperation<Date>({ "lt": new Date() }));
-    expect(_ => testSingleNumericalOperation<Date>({ "gt": new Date() }));
-    expect(_ => testSingleNumericalOperation<Date>({ "lte": new Date() }));
-    expect(_ => testSingleNumericalOperation<Date>({ "gte": new Date() }));
-})
+    expectTypeOf({ "eq":  new Date() }).toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  new Date() }).toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": new Date() }).toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gt":  new Date() }).toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gte": new Date() }).toMatchTypeOf<SingleNumericalOperations<Date>>();
+});
 
-// Invalid for associating a date to a set to be number field
+test('SingleNumericalOperation should forbid operations when mismatching type', () => {
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": new Date() });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "lt": new Date() });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "gt": new Date() });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "lte": new Date() });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "gte": new Date() });
+    expectTypeOf({ "eq":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+});
 
-// Invalid for associating a number to a set to be Date field
+test('SingleNumericalOperation should forbid operations with any other type than date or number', () => {
+    expectTypeOf({ "eq": true }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gte": "" }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": null }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "gt":  undefined }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "eq":  [] }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  {} }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<Date>({ "eq": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<Date>({ "lt": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<Date>({ "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<Date>({ "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<Date>({ "gte": 0 });
+    expectTypeOf({ "eq": true }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gte": "" }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lte": null }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "gt":  undefined }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "eq":  [] }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  {} }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+});
 
-// Invalid for other wrong types
+test('SingleNumericalOperation should forbid operations with combined operators', () => {
+    expectTypeOf({ "eq": 0, "lt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "eq": 0, "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "eq": 0, "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "eq": 0, "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": true });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": "" });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": [] });
+    expectTypeOf({ "lt": 0, "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lt": 0, "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lt": 0, "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
 
-// Invalid combination with exclusive eq
+    expectTypeOf({ "lte": 0, "gt":  0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
+    expectTypeOf({ "lte": 0, "gte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": 0, "lt": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": 0, "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": 0, "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "eq": 0, "gte": 0 });
+    expectTypeOf({ "gte": 0, "lte": 0 }).not.toMatchTypeOf<SingleNumericalOperations<number>>();
 
-// Invalid combinations with incompatible bounds
+    expectTypeOf({ "eq": new Date(), "lt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "eq": new Date(), "lte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "eq": new Date(), "gt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "eq": new Date(), "gte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "lt": 0, "gt": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "lt": 0, "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "lt": 0, "gte": 0 });
+    expectTypeOf({ "lt": new Date(), "lte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lt": new Date(), "gt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lt": new Date(), "gte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "gt": 0, "lte": 0 });
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "gt": 0, "gte": 0 });
+    expectTypeOf({ "lte": new Date(), "gt":  new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": new Date(), "gte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
 
-// @ts-expect-error
-testSingleNumericalOperation<number>({ "gte": 0, "lte": 0 });
+    expectTypeOf({ "gte": new Date(), "lte": new Date() }).not.toMatchTypeOf<SingleNumericalOperations<Date>>();
+});
 
 
 //---------------------------------------------------------------------- DoubleNumericalOperation
 
-function testDoubleNumericalOperation<T extends number | Date>(op: DoubleNumericalOperations<T>): void {}
-
 test('DoubleNumericalOperations should allow any legal combination of two operators', () => {
-    expect(_ => testDoubleNumericalOperation<number>({ "lt": 0, "gt": 0 }));
-    expect(_ => testDoubleNumericalOperation<number>({ "lt": 0, "gte": 0 }));
+    expectTypeOf({ "lt":  0, "gt":  0 }).toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  0, "gte": 0 }).toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lte": 0, "gt":  0 }).toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lte": 0, "gte": 0 }).toMatchTypeOf<DoubleNumericalOperations<number>>();
 
-    expect(_ => testDoubleNumericalOperation<number>({ "lte": 0, "gt": 0 }));
-    expect(_ => testDoubleNumericalOperation<number>({ "lte": 0, "gte": 0 }));
+    expectTypeOf({ "lt":  new Date(), "gt":  new Date() }).toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  new Date(), "gte": new Date() }).toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": new Date(), "gt":  new Date() }).toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": new Date(), "gte": new Date() }).toMatchTypeOf<DoubleNumericalOperations<Date>>();
+});
 
-    expect(_ => testDoubleNumericalOperation<Date>({ "lt": new Date(), "gt": new Date() }));
-    expect(_ => testDoubleNumericalOperation<Date>({ "lt": new Date(), "gte": new Date() }));
+test('DoubleNumericalOperations should forbid single operator', () => {
+    expectTypeOf({ "eq":  0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "gt":  0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "gte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
 
-    expect(_ => testDoubleNumericalOperation<Date>({ "lte": new Date(), "gt": new Date() }));
-    expect(_ => testDoubleNumericalOperation<Date>({ "lte": new Date(), "gte": new Date() }));
-})
+    expectTypeOf({ "eq":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+});
 
-// Invalid numerical Date-number associations with valid bounds
+test('DoubleNumericalOperations should forbid any illegal combination of two operators', () => {
+    expectTypeOf({ "eq":  0, "lt":  0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "eq":  0, "lte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "eq":  0, "gt":  0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "eq":  0, "gte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "lt":  0, "lte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
+    expectTypeOf({ "gt":  0, "gte": 0 }).not.toMatchTypeOf<DoubleNumericalOperations<number>>();
 
-// @ts-expect-error
-testDoubleNumericalOperation<Date>({ "lt": 0, "gt": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation<Date>({ "lt": 0, "gte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation<Date>({ "lte": 0, "gt": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation<Date>({ "lte": 0, "gte": 0 });
+    expectTypeOf({ "eq":  new Date(), "lt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "eq":  new Date(), "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "eq":  new Date(), "gt":  new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "eq":  new Date(), "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "lt":  new Date(), "lte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+    expectTypeOf({ "gt":  new Date(), "gte": new Date() }).not.toMatchTypeOf<DoubleNumericalOperations<Date>>();
+});
 
-// @ts-expect-error
-testDoubleNumericalOperation<number>({ "lt": new Date(), "gt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperation<number>({ "lt": new Date(), "gte": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperation<number>({ "lte": new Date(), "gt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperation<number>({ "lte": new Date(), "gte": new Date() });
-
-// Invalid combinations for using eq
-
-// @ts-expect-error
-testDoubleNumericalOperation({ "eq": 0, "lt": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation({ "eq": 0, "gt": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation({ "eq": 0, "lte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation({ "eq": 0, "gte": 0 });
-
-// Invalid bound combinations
-
-// @ts-expect-error
-testDoubleNumericalOperation({ "lt": 0, "lte": 0 });
-// @ts-expect-error
-testDoubleNumericalOperation({ "gt": 0, "gte": 0 });
-
-// Invalid type associations
-
-// @ts-expect-error
-testDoubleNumericalOperation({ "lt": true });
-// @ts-expect-error
-testDoubleNumericalOperation({ "lt": 0, "gt": true });
-// @ts-expect-error
-testDoubleNumericalOperation({ "lt": 0, "gt": new Date() });
-// @ts-expect-error
-testDoubleNumericalOperation({ "lt": 0, "gt": "" });
 
 //---------------------------------------------------------------------- NumericalOperation
 
-function testNumericalOperation<V extends number|Date>(op: NumericalOperation<V>): void {}
-
 test('NumericalOperation should allow only valid numerical operator combination or single operator', () => {
-    expect(_ => testNumericalOperation<number>({ "eq": 0 }));
-    expect(_ => testNumericalOperation<number>({ "lt": 0 }));
-    expect(_ => testNumericalOperation<number>({ "gt": 0 }));
-    expect(_ => testNumericalOperation<number>({ "lte": 0 }));
-    expect(_ => testNumericalOperation<number>({ "gte": 0 }));
+    expectTypeOf({ "eq":  0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lt":  0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lte": 0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "gt":  0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "gte": 0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lt":  0, "gt":  0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lt":  0, "gte": 0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lte": 0, "gt":  0 }).toMatchTypeOf<NumericalOperation<number>>();
+    expectTypeOf({ "lte": 0, "gte": 0 }).toMatchTypeOf<NumericalOperation<number>>();
 
-    expect(_ => testNumericalOperation<number>({ "lt": 0, "gt": 0 }));
-    expect(_ => testNumericalOperation<number>({ "lt": 0, "gte": 0 }));
-
-    expect(_ => testNumericalOperation<number>({ "lte": 0, "gt": 0 }));
-    expect(_ => testNumericalOperation<number>({ "lte": 0, "gte": 0 }));
-
-    expect(_ => testNumericalOperation<Date>({ "eq": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "lt": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "gt": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "lte": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "gte": new Date() }));
-
-    expect(_ => testNumericalOperation<Date>({ "lt": new Date(), "gt": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "lt": new Date(), "gte": new Date() }));
-
-    expect(_ => testNumericalOperation<Date>({ "lte": new Date(), "gt": new Date() }));
-    expect(_ => testNumericalOperation<Date>({ "lte": new Date(), "gte": new Date() }));
-})
-
-// Invalid for combining with exclusive "eq"
-
-// @ts-expect-error
-testNumericalOperation({ "eq": 0, "lt": 0 });
-// @ts-expect-error
-testNumericalOperation({ "eq": 0, "gt": 0 });
-// @ts-expect-error
-testNumericalOperation({ "eq": 0, "lte": 0 });
-// @ts-expect-error
-testNumericalOperation({ "eq": 0, "gte": 0 });
-
-// Invalid bounds combinations
-
-// @ts-expect-error
-testNumericalOperation({ "lt": 0, "lte": 0 });
-// @ts-expect-error
-testNumericalOperation({ "gt": 0, "gte": 0 });
-
-// Invalid provided types
-
-// @ts-expect-error
-testNumericalOperation({ "lt": true });
-// @ts-expect-error
-testNumericalOperation({ "lt": 0, "gt": true });
-// @ts-expect-error
-testNumericalOperation({ "lt": 0, "gt": new Date() });
-// @ts-expect-error
-testNumericalOperation({ "lt": 0, "gt": "" });
+    expectTypeOf({ "eq":  new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lt":  new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lte": new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "gt":  new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "gte": new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lt":  new Date(), "gt":  new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lt":  new Date(), "gte": new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lte": new Date(), "gt":  new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+    expectTypeOf({ "lte": new Date(), "gte": new Date() }).toMatchTypeOf<NumericalOperation<Date>>();
+});
 
 
 //---------------------------------------------------------------------- LiteralOperation
 
-function testLiteralOperation(op: LiteralOperation): void {}
-
 test('LiteralOperation should allow legal combination of literal operators', () => {
-    expect(_ => testLiteralOperation({ "eq": "" }));
-    expect(_ => testLiteralOperation({ "contains": "" }));
-    expect(_ => testLiteralOperation({ "startswith": "" }));
-    expect(_ => testLiteralOperation({ "endswith": "" }));
+    expectTypeOf({ "eq":         "" }).toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "contains":   "" }).toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "startswith": "" }).toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "endswith":   "" }).toMatchTypeOf<LiteralOperation>();
 
-    expect(_ => testLiteralOperation({ "contains": "", "startswith": "" }));
-    expect(_ => testLiteralOperation({ "contains": "", "endswith": "" }));
-    expect(_ => testLiteralOperation({ "startswith": "", "endswith": "" }));
+    expectTypeOf({ "contains":    "", "startswith": "" }).toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "contains":    "", "endsswith":  "" }).toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "startswith":  "", "endswith":   "" }).toMatchTypeOf<LiteralOperation>();
 
-    expect(_ => testLiteralOperation({ "contains": "", "startswith": "", "endswith": "" }));
-})
+    expectTypeOf({ "contains":  "", "startswith": "", "endswith": "" }).toMatchTypeOf<LiteralOperation>();
+});
 
-// @ts-expect-error
-testLiteralOperation({ });
-// @ts-expect-error
-testLiteralOperation({ "whatever": "" });
-// @ts-expect-error
-testLiteralOperation({ "eq": "", "contains": "" });
-// @ts-expect-error
-testLiteralOperation({ "eq": "", "startswith": "" });
-// @ts-expect-error
-testLiteralOperation({ "eq": "", "endswith": "" });
+test('LiteralOperation should forbid combinations of literal operators containing "eq"', () => {
+    expectTypeOf({ "eq": "", "contains":   "" }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": "", "endswith":   "" }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": "", "startswith": "" }).not.toMatchTypeOf<LiteralOperation>();
+});
+
+test('LiteralOperation should forbid combinations of literal operators with non string value', () => {
+    expectTypeOf({ "eq": 0    }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": true }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": null }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": undefined }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": {} }).not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf({ "eq": [] }).not.toMatchTypeOf<LiteralOperation>();
+});
 
 
 //---------------------------------------------------------------------- BooleanOperation
 
-function testBooleanOperation(op: BooleanOperation): void {}
-
 test('BooleanOperation should allow operation with only one operator', () => {
-    expect(_ => testBooleanOperation({ "is": true }));
-    expect(_ => testBooleanOperation({ "not": false }));
-})
+    expectTypeOf({ "is":  true  }).toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "not": false }).toMatchTypeOf<BooleanOperation>();
+});
 
-// @ts-expect-error
-testBooleanOperation({});
-// @ts-expect-error
-testBooleanOperation({ "is": "" });
-// @ts-expect-error
-testBooleanOperation({ "is": 0 });
-// @ts-expect-error
-testBooleanOperation({ "is": new Date() });
+test('BooleanOperation should forbid operation with invalid value', () => {
+    expectTypeOf({ "is":  0 }).not.toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "is":  "" }).not.toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "is":  {} }).not.toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "is":  [] }).not.toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "is":  null }).not.toMatchTypeOf<BooleanOperation>();
+    expectTypeOf({ "is":  undefined }).not.toMatchTypeOf<BooleanOperation>();
+});
 
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": true });
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": false });
-
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": 0 });
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": "" });
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": new Date() });
-// @ts-expect-error
-testBooleanOperation({ "is": true, "not": [] });
+test('BooleanOperation should forbid operation with combined operators', () => {
+    expectTypeOf({ "is":  true, "not": false }).not.toMatchTypeOf<BooleanOperation>();
+});

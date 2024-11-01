@@ -1,4 +1,6 @@
-import { AtLeastOne, EntityListKeys, EntityScalarKeys, ExactlyOne } from "../src/utils.types"
+import { expectTypeOf, test } from 'vitest';
+
+import { AtLeastOne, EntityListKeys, EntityScalarKeys, ExactlyOne, Numeric, Primitive } from "../src/utils.types"
 
 interface TestEntity {
     a: unknown,
@@ -7,84 +9,108 @@ interface TestEntity {
     d: unknown[]
 };
 
+
+//---------------------------------------------------------------------- Primitives
+
+
+test('Primitive should only allow number, string, date and boolean', () => {
+    expectTypeOf<number>().toMatchTypeOf<Primitive>();
+    expectTypeOf<string>().toMatchTypeOf<Primitive>();
+    expectTypeOf<Date>().toMatchTypeOf<Primitive>();
+    expectTypeOf<boolean>().toMatchTypeOf<Primitive>();
+
+    expectTypeOf<undefined>().not.toMatchTypeOf<Primitive>();
+    expectTypeOf<null>().not.toMatchTypeOf<Primitive>();
+    expectTypeOf<[]>().not.toMatchTypeOf<Primitive>();
+    expectTypeOf<{}>().not.toMatchTypeOf<Primitive>();
+});
+
+test('Numeric should narrow primitive and only allow number and date', () => {
+    expectTypeOf<number>().toMatchTypeOf<Numeric>();
+    expectTypeOf<Date>().toMatchTypeOf<Numeric>();
+
+    expectTypeOf<string>().not.toMatchTypeOf<Numeric>();
+    expectTypeOf<boolean>().not.toMatchTypeOf<Numeric>();
+    expectTypeOf<undefined>().not.toMatchTypeOf<Numeric>();
+    expectTypeOf<null>().not.toMatchTypeOf<Numeric>();
+    expectTypeOf<[]>().not.toMatchTypeOf<Numeric>();
+    expectTypeOf<{}>().not.toMatchTypeOf<Numeric>();
+});
+
+
 //---------------------------------------------------------------------- AtLeastOne
 
-function testAtLeastOne(t: AtLeastOne<TestEntity>): void {};
 
 test('At least one should be valid if it contains exactly one key', () => {
-    expect(_ => testAtLeastOne({a: null})).not.toThrow();
-})
-
+    expectTypeOf({ a: null }).toMatchTypeOf<AtLeastOne<TestEntity>>();
+});
 
 test('At least one should be valid if it contains several keys', () => {
-    expect(_ => testAtLeastOne({a: null, b: null})).not.toThrow();
-})
+    expectTypeOf({ a: null, b: null }).toMatchTypeOf<AtLeastOne<TestEntity>>();
+});
 
-// @ts-expect-error
-// At least one should throw error if empty
-testAtLeastOne({});
+test('At least one should be invalid if empty', () => {
+    expectTypeOf({ }).not.toMatchTypeOf<AtLeastOne<TestEntity>>();
+});
 
-// @ts-expect-error
-// At least one should throw error if object key is not defined
-testAtLeastOne({ c: null });
+test('At least one should be invalid if containing key that is not in target', () => {
+    expectTypeOf({ c: null }).not.toMatchTypeOf<AtLeastOne<TestEntity>>();
+});
 
 
 //---------------------------------------------------------------------- ExactlyOne
 
-function testExactlyOne(t: ExactlyOne<TestEntity>): void {};
 
 test('Exactly one should be valid if it contains exactly one key', () => {
-    expect(_ => testAtLeastOne({a: null})).not.toThrow();
-})
+    expectTypeOf({ a: null }).toMatchTypeOf<ExactlyOne<TestEntity>>();
+});
 
-// @ts-expect-error
-// Exactly one should throw error if empty
-testExactlyOne({});
+test('Exactly one should throw error if empty', () => {
+    expectTypeOf({ }).not.toMatchTypeOf<ExactlyOne<TestEntity>>();
+});
 
-// @ts-expect-error
-// Exactly one should throw error if object key is not defined
-testExactlyOne({ c: null });
+test('Exactly one should throw error if it contains several keys', () => {
+    expectTypeOf({ a: null, b: null }).not.toMatchTypeOf<ExactlyOne<TestEntity>>();
+});
 
-// @ts-expect-error
-// Exactly one should throw error if it contains several keys
-testExactlyOne({ a: null, b: null });
+test('Exactly one should throw error if object key is not defined', () => {
+    expectTypeOf({ c: null }).not.toMatchTypeOf<ExactlyOne<TestEntity>>();
+});
 
 
 //---------------------------------------------------------------------- EntityScalarKeys
 
-function testScalarKeys(k: EntityScalarKeys<TestEntity>): void {}
 
 test('EntityScalarKeys should allow scalar keys from Entity', () => {
-    expect(_ => testScalarKeys("a")).not.toThrow();
-    expect(_ => testScalarKeys("b")).not.toThrow();
-})
+    expectTypeOf<'a'>().toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+    expectTypeOf<'b'>().toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+});
 
-// EntityScalarKeys should throw if key is associated to a list
-// @ts-expect-error
-testScalarKeys("c");
-// @ts-expect-error
-testScalarKeys("d");
+test('EntityScalarKeys should forbid list keys from Entity', () => {
+    expectTypeOf<'c'>().not.toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+    expectTypeOf<'d'>().not.toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+});
 
-// EntityScalarKeys should throw is key is unknown
-// @ts-expect-error
-testScalarKeys("unknown");
+test('EntityScalarKeys should forbid unknown keys', () => {
+    expectTypeOf<'unknown'>().not.toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+    expectTypeOf<'abc'>().not.toMatchTypeOf<EntityScalarKeys<TestEntity>>();
+});
 
 
 //---------------------------------------------------------------------- EntityListKeys
 
-function testListKeys(k: EntityListKeys<TestEntity>): void {}
 
 test('EntityListKeys should allow list keys from Entity', () => {
-    expect(_ => testListKeys("c")).not.toThrow();
-    expect(_ => testListKeys("d")).not.toThrow();
-})
+    expectTypeOf<'c'>().toMatchTypeOf<EntityListKeys<TestEntity>>();
+    expectTypeOf<'d'>().toMatchTypeOf<EntityListKeys<TestEntity>>();
+});
 
-// EntityListKeys should throw if key is associated to a scalar
-// @ts-expect-error
-testListKeys("a");
-// @ts-expect-error
-testListKeys("b");
+test('EntityListKeys should forbid list keys from Entity', () => {
+    expectTypeOf<'a'>().not.toMatchTypeOf<EntityListKeys<TestEntity>>();
+    expectTypeOf<'b'>().not.toMatchTypeOf<EntityListKeys<TestEntity>>();
+});
 
-// EntityListKeys should throw is key is unknown
-// @ts-expect-error
-testListKeys("unknown");
+test('EntityListKeys should forbid unknown keys', () => {
+    expectTypeOf<'unknown'>().not.toMatchTypeOf<EntityListKeys<TestEntity>>();
+    expectTypeOf<'abc'>().not.toMatchTypeOf<EntityListKeys<TestEntity>>();
+});
