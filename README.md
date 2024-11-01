@@ -12,6 +12,45 @@ It currently allows developer to type queries with `select`, `where` and `orderB
 
 See full documentation and extended examples in the [wiki](https://github.com/VictorFouquet/TypedQueryTS/wiki/Home).
 
+## Query
+
+Query is the main type that should be used to build a strongly typed [query](https://github.com/VictorFouquet/TypedQueryTS/wiki/Query) tree that :
+- takes a generic argument to maintain structural, logical and semantical constraints inside the tree
+- supports select clauses to extract data
+- supports where clauses to filter data
+- supports orderBy clauses to sort data
+- supports any combination of select, where and orderBy clauses
+- supports empty object assignation
+
+Example
+
+```typescript
+const query: Query<User> = {
+    // Select clause ✅
+    select: {
+        name: true,
+        address: {
+            zipcode: true
+        }
+    },
+    // Where clause ✅
+    where: {
+        name: "John",
+        address: {
+            zipcode: {
+                gte: 10000,
+                lt:  20000,
+            }
+        }
+    },
+    // OrderBy clause ✅
+    orderBy: [
+        { name: "asc" },
+        { address: { zipcode: "desc" } }
+    ]
+}
+```
+
 ## Selecting
 
 Selection type is the building blocks for typing a [select clause](https://github.com/VictorFouquet/TypedQueryTS/wiki/Selecting#select-clause) that :
