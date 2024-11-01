@@ -51,7 +51,7 @@ const query: Query<User> = {
 }
 ```
 
-### Query clauses
+## Query clauses
 
 ### Selecting
 
