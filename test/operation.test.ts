@@ -284,6 +284,25 @@ test('LiteralOperation should allow legal combination of literal operators', () 
     expectTypeOf({ "contains":  "", "startswith": "", "endswith": "" }).toMatchTypeOf<LiteralOperation>();
 });
 
+test('LiteralOperation should support like operator', () => {
+    expectTypeOf<{ "like": "%" }>().toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "abc%abc" }>().toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "%abc" }>().toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "abc%" }>().toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "%abc%" }>().toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "abc%abc%abc" }>().toMatchTypeOf<LiteralOperation>();
+});
+
+test('LiteralOperation should constrain the provided value to like string format if given like operator key', () => {
+    expectTypeOf<{ "like": "" }>().not.toMatchTypeOf<LiteralOperation>();
+    expectTypeOf<{ "like": "abc" }>().not.toMatchTypeOf<LiteralOperation>();
+});
+
+test('LiteralOperation should allow combination with like operator', () => {
+    expectTypeOf<{ "contains":  "", "startswith": "", "endswith": "", "like": "%abc" }>().toMatchTypeOf<LiteralOperation>();
+});
+
+
 test('LiteralOperation should forbid combinations of literal operators containing "eq"', () => {
     expectTypeOf({ "eq": "", "contains":   "" }).not.toMatchTypeOf<LiteralOperation>();
     expectTypeOf({ "eq": "", "endswith":   "" }).not.toMatchTypeOf<LiteralOperation>();
