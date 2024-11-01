@@ -22,7 +22,8 @@ test('EqualityOp should forbid any other operator', () => {
     expectTypeOf<"all">().not.toMatchTypeOf<EqualityOp>();
     expectTypeOf<"is">().not.toMatchTypeOf<EqualityOp>();
     expectTypeOf<"not">().not.toMatchTypeOf<EqualityOp>();
-    expectTypeOf<"or">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<EqualityOp>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<EqualityOp>();
     expectTypeOf<"asc">().not.toMatchTypeOf<EqualityOp>();
     expectTypeOf<"desc">().not.toMatchTypeOf<EqualityOp>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<EqualityOp>();
@@ -50,7 +51,8 @@ test('LowerOp should forbid any other operator than "lt" and "lte"', () => {
     expectTypeOf<"all">().not.toMatchTypeOf<LowerOp>();
     expectTypeOf<"is">().not.toMatchTypeOf<LowerOp>();
     expectTypeOf<"not">().not.toMatchTypeOf<LowerOp>();
-    expectTypeOf<"or">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<LowerOp>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<LowerOp>();
     expectTypeOf<"asc">().not.toMatchTypeOf<LowerOp>();
     expectTypeOf<"desc">().not.toMatchTypeOf<LowerOp>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<LowerOp>();
@@ -77,7 +79,8 @@ test('UpperOp should forbid any other operator than "gt" and "gte"', () => {
     expectTypeOf<"all">().not.toMatchTypeOf<UpperOp>();
     expectTypeOf<"is">().not.toMatchTypeOf<UpperOp>();
     expectTypeOf<"not">().not.toMatchTypeOf<UpperOp>();
-    expectTypeOf<"or">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<UpperOp>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<UpperOp>();
     expectTypeOf<"asc">().not.toMatchTypeOf<UpperOp>();
     expectTypeOf<"desc">().not.toMatchTypeOf<UpperOp>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<UpperOp>();
@@ -104,7 +107,8 @@ test('NumericalOperator should forbid any other operator than "gt" and "gte"', (
     expectTypeOf<"all">().not.toMatchTypeOf<NumericalOperator>();
     expectTypeOf<"is">().not.toMatchTypeOf<NumericalOperator>();
     expectTypeOf<"not">().not.toMatchTypeOf<NumericalOperator>();
-    expectTypeOf<"or">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<NumericalOperator>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<NumericalOperator>();
     expectTypeOf<"asc">().not.toMatchTypeOf<NumericalOperator>();
     expectTypeOf<"desc">().not.toMatchTypeOf<NumericalOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<NumericalOperator>();
@@ -131,7 +135,8 @@ test('LiteralOperator should forbid any other operator', () => {
     expectTypeOf<"all">().not.toMatchTypeOf<LiteralOperator>();
     expectTypeOf<"is">().not.toMatchTypeOf<LiteralOperator>();
     expectTypeOf<"not">().not.toMatchTypeOf<LiteralOperator>();
-    expectTypeOf<"or">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<LiteralOperator>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<LiteralOperator>();
     expectTypeOf<"asc">().not.toMatchTypeOf<LiteralOperator>();
     expectTypeOf<"desc">().not.toMatchTypeOf<LiteralOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<LiteralOperator>();
@@ -140,7 +145,7 @@ test('LiteralOperator should forbid any other operator', () => {
 
 //---------------------------------------------------------------------- BooleanOperator
 
-test('BooleanOperator should allow "is" and "not" operators', () => {
+test('BooleanOperator should allow "is" and "NOT" operators', () => {
     expectTypeOf<"is">().toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"not">().toMatchTypeOf<BooleanOperator>();
 });
@@ -158,7 +163,8 @@ test('BooleanOperator should forbid any other operator', () => {
     expectTypeOf<"some">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"none">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"none">().not.toMatchTypeOf<BooleanOperator>();
-    expectTypeOf<"or">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"asc">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"desc">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<BooleanOperator>();
@@ -167,9 +173,9 @@ test('BooleanOperator should forbid any other operator', () => {
 
 //---------------------------------------------------------------------- LogicalOperator
 
-test('LogicalOperator should allow "or" and "not" operators', () => {
-    expectTypeOf<"or">().toMatchTypeOf<LogicalOperator>();
-    expectTypeOf<"not">().toMatchTypeOf<LogicalOperator>();
+test('LogicalOperator should allow "OR" and "NOT" operators', () => {
+    expectTypeOf<"OR">().toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"NOT">().toMatchTypeOf<LogicalOperator>();
 });
 
 test('LogicalOperator should forbid any other operator', () => {
@@ -186,6 +192,7 @@ test('LogicalOperator should forbid any other operator', () => {
     expectTypeOf<"none">().not.toMatchTypeOf<LogicalOperator>();
     expectTypeOf<"all">().not.toMatchTypeOf<LogicalOperator>();
     expectTypeOf<"is">().not.toMatchTypeOf<LogicalOperator>();
+    expectTypeOf<"not">().not.toMatchTypeOf<LogicalOperator>();
     expectTypeOf<"asc">().not.toMatchTypeOf<LogicalOperator>();
     expectTypeOf<"desc">().not.toMatchTypeOf<LogicalOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<LogicalOperator>();
@@ -212,7 +219,8 @@ test('ListOperator should forbid any other operator', () => {
     expectTypeOf<"endswith">().not.toMatchTypeOf<ListOperator>();
     expectTypeOf<"is">().not.toMatchTypeOf<ListOperator>();
     expectTypeOf<"not">().not.toMatchTypeOf<ListOperator>();
-    expectTypeOf<"or">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<ListOperator>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<ListOperator>();
     expectTypeOf<"asc">().not.toMatchTypeOf<ListOperator>();
     expectTypeOf<"desc">().not.toMatchTypeOf<ListOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<ListOperator>();
@@ -241,7 +249,8 @@ test('OrderingOperator should forbid any other operator', () => {
     expectTypeOf<"all">().not.toMatchTypeOf<OrderingOperator>();
     expectTypeOf<"is">().not.toMatchTypeOf<OrderingOperator>();
     expectTypeOf<"not">().not.toMatchTypeOf<OrderingOperator>();
-    expectTypeOf<"or">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<OrderingOperator>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<OrderingOperator>();
     expectTypeOf<"whatever">().not.toMatchTypeOf<OrderingOperator>();
 });
 
@@ -265,6 +274,8 @@ test('InferOperator<number> should forbid any other operator', () => {
     expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<number>>();
     expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<number>>();
     expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<InferOperator<number>>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<InferOperator<number>>();
     expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<number>>();
     expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<number>>();
     expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<number>>();
@@ -287,6 +298,8 @@ test('InferOperator<Date> should forbid any other operator', () => {
     expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<Date>>();
     expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<Date>>();
     expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<InferOperator<Date>>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<InferOperator<Date>>();
     expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<Date>>();
     expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<Date>>();
     expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<Date>>();
@@ -310,6 +323,8 @@ test('InferOperator<string> should forbid any other operator', () => {
     expectTypeOf<"gte">().not.toMatchTypeOf<InferOperator<string>>();
     expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<string>>();
     expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<InferOperator<string>>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<InferOperator<string>>();
     expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<string>>();
     expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<string>>();
     expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<string>>();
@@ -335,6 +350,8 @@ test('InferOperator<boolean> should forbid any other operator', () => {
     expectTypeOf<"some">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"all">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"none">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<boolean>>();
 });
@@ -357,6 +374,8 @@ test('InferOperator<any[]> should forbid any other operator', () => {
     expectTypeOf<"endswith">().not.toMatchTypeOf<InferOperator<any[]>>();
     expectTypeOf<"is">().not.toMatchTypeOf<InferOperator<any[]>>();
     expectTypeOf<"not">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"OR">().not.toMatchTypeOf<InferOperator<any[]>>();
+    expectTypeOf<"NOT">().not.toMatchTypeOf<InferOperator<any[]>>();
     expectTypeOf<"asc">().not.toMatchTypeOf<InferOperator<any[]>>();
     expectTypeOf<"desc">().not.toMatchTypeOf<InferOperator<any[]>>();
 });

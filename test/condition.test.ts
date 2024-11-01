@@ -567,33 +567,33 @@ interface EntityConditionOr {
 };
 
 test('OrCondition should contain two sub conditions', () => {
-    expectTypeOf<{ or: [
+    expectTypeOf<{ OR: [
         { id: 0 },
         { id: 1 }
     ]}>().toMatchTypeOf<OrCondition<EntityConditionOr>>();
-    expectTypeOf<{ or: [
+    expectTypeOf<{ OR: [
         { id: 0 },
         { name: { contains: "" } }
     ]}>().toMatchTypeOf<OrCondition<EntityConditionOr>>();
 });
 
-test('OrCondition should support nested or', () => {
-    expectTypeOf<{ or: [
-        { or: [ { id: 0 }, { id: 1 } ] },
-        { or: [ { id: 2 }, { id: 3 } ] }
+test('OrCondition should support nested OR', () => {
+    expectTypeOf<{ OR: [
+        { OR: [ { id: 0 }, { id: 1 } ] },
+        { OR: [ { id: 2 }, { id: 3 } ] }
     ]}>().toMatchTypeOf<OrCondition<EntityConditionOr>>();
 });
 
 test('OrCondition should fordbid incomplete statement', () => {
     expectTypeOf<{ }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
-    expectTypeOf<{ or: [ ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
-    expectTypeOf<{ or: [ { id: 5 } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
+    expectTypeOf<{ OR: [ ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
+    expectTypeOf<{ OR: [ { id: 5 } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
 });
 
 test('OrCondition should enforce type matching from entity properties', () => {
-    expectTypeOf<{ or: [ { id: 5 }, { name: 5 } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
+    expectTypeOf<{ OR: [ { id: 5 }, { name: 5 } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
     // @ts-expect-error
-    expectTypeOf<{ or: [ { id: 5 }, { name: "" } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
+    expectTypeOf<{ OR: [ { id: 5 }, { name: "" } ] }>().not.toMatchTypeOf<OrCondition<EntityConditionOr>>();
 });
 
 
@@ -607,8 +607,8 @@ interface EntityConditionNot {
 };
 
 test('NotCondition should contain at least one sub condition', () => {
-    expectTypeOf({ not: { id: 0 } }).toMatchTypeOf<NotCondition<EntityConditionNot>>()
-    expectTypeOf({ not: { id: 0, name: { contains: "" } }}).toMatchTypeOf<NotCondition<EntityConditionNot>>()
+    expectTypeOf({ NOT: { id: 0 } }).toMatchTypeOf<NotCondition<EntityConditionNot>>()
+    expectTypeOf({ NOT: { id: 0, name: { contains: "" } }}).toMatchTypeOf<NotCondition<EntityConditionNot>>()
 });
 
 
@@ -624,9 +624,9 @@ interface EntityLogicalCondition {
 test('WhereCondition should allow combination of multiple logical operators', () => {
     expectTypeOf<{
         active: true,
-        not: { or: [ { id: 5 }, { id: 1 } ] },
-        or: [
-            { not: { name: "" } },
+        NOT: { OR: [ { id: 5 }, { id: 1 } ] },
+        OR: [
+            { NOT: { name: "" } },
             { name: { contains: " " } }
         ]
     }>().toMatchTypeOf<WhereCondition<EntityLogicalCondition>>()
@@ -661,11 +661,11 @@ test('WhereCondition should allow combination of multiple logical operators', ()
         where: {                                            // Select users where :
             id: { gt: 0, lte: 100 },                        // id is in range ]0, 100]
             firstname: 'John',                              // and first name is John
-            or: [
+            OR: [
                 { address: { zipcode: 12345 } },            // and address' zipcode is 123456
-                { address: { city: { startswith: "New" }} } // or address' city starts with "New"
+                { address: { city: { startswith: "New" }} } // OR address' city starts with "New"
             ],
-            not: {                                          // and hasn't some todos with "work" in their title
+            NOT: {                                          // and hasn't some todos with "work" in their title
                 todos: { 
                     some: { title: { contains: "work" } }
                 }

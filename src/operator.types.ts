@@ -15,7 +15,7 @@ export type LiteralOperator = LikeOperator | EqualityOp | 'contains' | 'startswi
 export type BooleanOperator = 'is' | 'not';
 
 // Composition operators
-export type LogicalOperator = 'or' | 'not';
+export type LogicalOperator = 'OR' | 'NOT';
 export type ListOperator = 'some' | 'none' | 'all';
 
 // Ordering operators

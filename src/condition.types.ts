@@ -32,12 +32,12 @@ export type LogicalCondition<T> = OrCondition<T> & NotCondition<T>;
 
 // OR requires exactly two subconditions
 export type OrCondition<T> = {
-    or: [WhereCondition<T>, WhereCondition<T>]
+    OR: [WhereCondition<T>, WhereCondition<T>]
 };
 
 // NOT requires one subcondition
 export type NotCondition<T> = {
-    not: WhereCondition<T>
+    NOT: WhereCondition<T>
 };
 
 // Main where condition type
