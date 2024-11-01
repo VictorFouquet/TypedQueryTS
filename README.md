@@ -51,7 +51,9 @@ const query: Query<User> = {
 }
 ```
 
-## Selecting
+### Query clauses
+
+### Selecting
 
 Selection type is the building blocks for typing a [select clause](https://github.com/VictorFouquet/TypedQueryTS/wiki/Selecting#select-clause) that :
 
@@ -78,7 +80,7 @@ const selectClause: SelectClause<User> = {
 
 More details in the [selecting](https://github.com/VictorFouquet/TypedQueryTS/wiki/Selecting) section.
 
-## Sorting
+### Sorting
 
 Ordering types are the building blocks for typing an [orderBy clause](https://github.com/VictorFouquet/TypedQueryTS/wiki/Sorting#orderby-clause) that :
 
@@ -115,7 +117,7 @@ const orderByIdThenZipCode: OrderByClause<User> = {
 
 More details in the [sorting](https://github.com/VictorFouquet/TypedQueryTS/wiki/Sorting) section.
 
-## Filtering
+### Filtering
 
 Condition types are the main building blocks for typing a [where clause](https://github.com/VictorFouquet/TypedQueryTS/wiki/Filtering#where-clause) that :
 
