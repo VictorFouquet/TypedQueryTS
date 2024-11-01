@@ -61,3 +61,7 @@ test('Query should handle combination of different clauses', () => {
         ]
     }>().toMatchTypeOf<Query<Entity>>()
 });
+
+test('Query should handle empty objects', () => {
+    expectTypeOf<{}>().toMatchTypeOf<Query<Entity>>()
+});
