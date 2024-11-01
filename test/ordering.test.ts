@@ -1,5 +1,5 @@
 import { expectTypeOf, test } from 'vitest';
-import { HierarchicalOrdering, Ordering } from "../src/ordering.types"
+import { HierarchicalOrdering, OrderByClause, Ordering } from "../src/ordering.types"
 
 interface OrderingTest {
     id: number,
@@ -65,8 +65,6 @@ test("Ordering should forbid sorting based on a nested array", () => {
 
 //---------------------------------------------------------------------- HierarchicalOrdering
 
-function hierarchicalOrderByTest<T>(o: HierarchicalOrdering<T>) {};
-
 test("HierarchicalOrdering should allow hierarchical sorting by primitive fields", () => {
     expectTypeOf<[
         { id: 'asc' },
@@ -108,4 +106,25 @@ test("HierarchicalOrdering should forbid sorting by array fields", () => {
     expectTypeOf<
         [ { arrayObj: { id: 'asc' } }, { id: 'asc' } ]
     >().not.toMatchTypeOf<HierarchicalOrdering<OrderingTest>>();
+});
+
+
+//---------------------------------------------------------------------- OrderByClause
+
+test('OrderByClause should allow sorting under an "orderBy" key', () => {
+    expectTypeOf<{
+        orderBy: { id: 'asc' }
+    }>().toMatchTypeOf<OrderByClause<OrderingTest>>();
+});
+
+test('OrderByClause should allow hierarchical sorting under an "orderBy" key', () => {
+    expectTypeOf<{
+        orderBy: [
+            { id: 'asc' },
+            { name: 'desc' },
+            { createdAt: 'asc' },
+            { obj: { id: "desc" } },
+            { obj: { name: "asc" } }
+        ]
+    }>().toMatchTypeOf<OrderByClause<OrderingTest>>();
 });

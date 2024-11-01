@@ -12,5 +12,5 @@ export type Ordering<T> = ExactlyOne<{
 export type HierarchicalOrdering<T> = Ordering<T>[];
 
 export type OrderByClause<T> = {
-    orderBy: Ordering<T> & HierarchicalOrdering<T>
+    orderBy: Ordering<T> | HierarchicalOrdering<T>
 }
