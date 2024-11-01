@@ -35,7 +35,7 @@ test('PrimitiveCondition should enforce primitive constraint with corresponding 
     expectTypeOf({ lt: 0 }).not.toMatchTypeOf<PrimitiveCondition<string>>();
     expectTypeOf({ is: true }).not.toMatchTypeOf<PrimitiveCondition<string>>();
 
-    expectTypeOf({ eq: true }).not.toMatchTypeOf<PrimitiveCondition<boolean>>();
+    expectTypeOf({ lt: true }).not.toMatchTypeOf<PrimitiveCondition<boolean>>();
     expectTypeOf({ eq: new Date() }).not.toMatchTypeOf<PrimitiveCondition<boolean>>();
     expectTypeOf({ contains: "" }).not.toMatchTypeOf<PrimitiveCondition<boolean>>();
     expectTypeOf({ eq: 0 }).not.toMatchTypeOf<PrimitiveCondition<boolean>>();
@@ -83,7 +83,7 @@ test('ValueCondition should enforce primitive constraint to the corresponding pr
     expectTypeOf({ lt: 0 }).not.toMatchTypeOf<ValueCondition<string>>();
     expectTypeOf({ is: true }).not.toMatchTypeOf<ValueCondition<string>>();
 
-    expectTypeOf({ eq: true }).not.toMatchTypeOf<ValueCondition<boolean>>();
+    expectTypeOf({ lt: true }).not.toMatchTypeOf<ValueCondition<boolean>>();
     expectTypeOf({ eq: new Date() }).not.toMatchTypeOf<ValueCondition<boolean>>();
     expectTypeOf({ contains: "" }).not.toMatchTypeOf<ValueCondition<boolean>>();
     expectTypeOf({ eq: 0 }).not.toMatchTypeOf<ValueCondition<boolean>>();

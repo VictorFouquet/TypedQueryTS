@@ -148,10 +148,10 @@ test('LiteralOperator should forbid any other operator', () => {
 test('BooleanOperator should allow "is" and "NOT" operators', () => {
     expectTypeOf<"is">().toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"not">().toMatchTypeOf<BooleanOperator>();
+    expectTypeOf<"eq">().toMatchTypeOf<BooleanOperator>();
 });
 
 test('BooleanOperator should forbid any other operator', () => {
-    expectTypeOf<"eq">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"lt">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"lte">().not.toMatchTypeOf<BooleanOperator>();
     expectTypeOf<"gt">().not.toMatchTypeOf<BooleanOperator>();
@@ -335,10 +335,10 @@ test('InferOperator<string> should forbid any other operator', () => {
 test('InferOperator<boolean> should allow LiteralOperator', () => {
     expectTypeOf<"is">().toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"not">().toMatchTypeOf<InferOperator<boolean>>();
+    expectTypeOf<"eq">().toMatchTypeOf<InferOperator<boolean>>();
 })
 
 test('InferOperator<boolean> should forbid any other operator', () => {
-    expectTypeOf<"eq">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"lt">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"lte">().not.toMatchTypeOf<InferOperator<boolean>>();
     expectTypeOf<"gt">().not.toMatchTypeOf<InferOperator<boolean>>();

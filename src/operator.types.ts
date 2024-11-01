@@ -12,7 +12,7 @@ export type LikeOperator = 'like';
 export type LiteralOperator = LikeOperator | EqualityOp | 'contains' | 'startswith' | 'endswith';
 
 // Boolean operators
-export type BooleanOperator = 'is' | 'not';
+export type BooleanOperator = EqualityOp | 'is' | 'not';
 
 // Composition operators
 export type LogicalOperator = 'OR' | 'NOT';
