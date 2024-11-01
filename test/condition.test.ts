@@ -1,4 +1,5 @@
-import { EntityCondition, ListCondition, OrCondition, NotCondition, PrimitiveCondition, ValueCondition, WhereCondition } from "../src/condition.types";
+import { EntityCondition, ListCondition, OrCondition, NotCondition, PrimitiveCondition, ValueCondition, WhereCondition, WhereClause } from "../src/condition.types";
+import { LiteralOperation, NumericalOperation } from "../src/operation.types";
 import { Primitive } from "../src/utils.types";
 
 
@@ -726,5 +727,49 @@ test('WhereCondition should allow combination of multiple logical operators', ()
             { not: { name: "" } },
             { name: { contains: " " } }
         ]
+    }));
+});
+
+//---------------------------------------------------------------------- WhereClause
+
+
+interface UserWhere {
+    id: number
+    firstname: string,
+    lastname: string,
+    address: AddressWhere,
+    grades: number[],
+    todos: TodoWhere[],
+    binGrid: boolean[][]
+};
+
+interface AddressWhere {
+    streetNumber: number,
+    streetName: string,
+    zipcode: number,
+    city: string
+};
+
+interface TodoWhere {
+    title: string
+}
+
+function testWhereClause(v: WhereClause<UserWhere>): void {}
+
+test('WhereCondition should allow combination of multiple logical operators', () => {
+    expect(_ => testWhereClause({
+        where: {                                            // Select users where :
+            id: { gt: 0, lte: 100 },                        // id is in range ]0, 100]
+            firstname: 'John',                              // and first name is John
+            or: [
+                { address: { zipcode: 12345 } },            // and address' zipcode is 123456
+                { address: { city: { startswith: "New" }} } // or address' city starts with "New"
+            ],
+            not: {                                          // and hasn't some todos with "work" in their title
+                todos: { 
+                    some: { title: { contains: "work" } }
+                }
+            }, 
+        }
     }));
 });
