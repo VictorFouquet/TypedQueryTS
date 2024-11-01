@@ -1,4 +1,4 @@
-import { NumericalOperator, LowerOp, UpperOp, LiteralOperator, BooleanOperator, EqualityOp } from "./operator.types";
+import { NumericalOperator, LowerOp, UpperOp, LiteralOperator, BooleanOperator, EqualityOp, LikeOperator } from "./operator.types";
 import { AtLeastOne, ExactlyOne, Numeric } from "./utils.types";
 
 
@@ -38,9 +38,14 @@ export type NumericalOperation<V extends Numeric> = V extends number ?
 
 // Literal operation must contain at least one operator and invalid any combination containing "eq"
 export type LiteralOperation = ExactlyOne<{
-    [K in LiteralOperator]: K extends EqualityOp ? string : never
+    [K in LiteralOperator]:
+        K extends EqualityOp ? string :
+        never
 }> | AtLeastOne<{
-    [K in LiteralOperator]: K extends EqualityOp ? never : string
+    [K in LiteralOperator]:
+        K extends EqualityOp ? never :
+        K extends LikeOperator ? `${string}%${string}` :
+        string
 }>
 
 // Boolean operation must contain exactly one operator
