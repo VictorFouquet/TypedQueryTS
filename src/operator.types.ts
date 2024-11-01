@@ -5,8 +5,11 @@ export type LowerOp = 'lt' | 'lte';  // Less than operators
 export type UpperOp = 'gt' | 'gte';  // Greater than operators
 export type NumericalOperator = EqualityOp | LowerOp | UpperOp;
 
+// Like Operator
+export type LikeOperator = 'like';
+
 // String comparison operators
-export type LiteralOperator = EqualityOp | 'contains' | 'startswith' | 'endswith';
+export type LiteralOperator = LikeOperator | EqualityOp | 'contains' | 'startswith' | 'endswith';
 
 // Boolean operators
 export type BooleanOperator = 'is' | 'not';
