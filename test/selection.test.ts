@@ -1,5 +1,5 @@
 import { expectTypeOf, test } from 'vitest';
-import { Selection } from "../src/selection.types"
+import { SelectClause, Selection } from "../src/selection.types"
 
 interface SelectionTest {
     id: number,
@@ -33,13 +33,53 @@ test('Selection should be allowed on nested object array fields', () => {
     expectTypeOf({ obj: { arrayNum: true } }).toMatchTypeOf<Selection<SelectionTest>>();
 });
 
-test('Selection should be forbidden on nested object', () => {
+test('Selection should be forbidden when directly selecting a nested object or array of objects', () => {
     expectTypeOf({ obj: true }).not.toMatchTypeOf<Selection<SelectionTest>>();
     expectTypeOf({ arrayObj: true }).not.toMatchTypeOf<Selection<SelectionTest>>();
 });
 
 test('Selection should be forbidden if empty', () => {
     expectTypeOf({ }).not.toMatchTypeOf<Selection<SelectionTest>>();
+});
+
+test('SelectClause should nest selection object under "select" property', () => {
+    expectTypeOf({ 
+        select: {
+            id: true
+        }
+    }).toMatchTypeOf<SelectClause<SelectionTest>>();
+
+    expectTypeOf({ 
+        select: {
+            id: true,
+            name: true,
+            createdAt: true,
+            arrayNum: true,
+            obj: {
+                name: true,
+                arrayNum: true
+            },
+            arrayObj: {
+                id: true
+            }
+        }
+    }).toMatchTypeOf<SelectClause<SelectionTest>>();
+
+    expectTypeOf({ 
+        select: {
+            id: true,
+            name: true,
+            createdAt: true,
+            arrayNum: true,
+            obj: {
+                name: true,
+                arrayNum: true
+            },
+            arrayObj: {
+                id: true
+            }
+        }
+    }).toMatchTypeOf<SelectClause<SelectionTest>>();
 });
 
 test('Selection should be forbidden on nested arrays', () => {
