@@ -1,14 +1,60 @@
 import { Operators } from "./constants";
-import { DoubleNumericalOperations, EqOperation, GteOperation, GtOperation, LiteralOperation, LteGteOperation, LteGtOperation, LteOperation, LtGteOperation, LtGtOperation, LtOperation, SingleNumericalOperations } from "./operation.types";
+import { ContainsLiteralOperation, DoubleNumericalOperations, EndswithLiteralOperation, EqLiteralOperation, EqOperation, GteOperation, GtOperation, LikeLiteralOperation, LiteralOperation, LteGteOperation, LteGtOperation, LteOperation, LtGteOperation, LtGtOperation, LtOperation, SingleNumericalOperations, StartsWithLiteralOperation } from "./operation.types";
 import { isNumericalOperator, isLowerOp, isUpperOp, isLiteralOperator } from "./operator.type-guards";
 import { isNotNullOrUndefined, isNumeric } from "./utils.type-guards";
 import { Numeric } from "./utils.types";
 
-export const isLiteralOperation = (value: any): value is LiteralOperation => {
+
+const isSingleLiteralOperationInternal = (value: any): value is LiteralOperation => {
     return isNotNullOrUndefined(value)
         && typeof value === 'object'
-        && !(value instanceof Date)
-        && Object.entries(value).every(([k, v]) => isLiteralOperator(k) && typeof v === 'string');
+        && Object.entries(value).length === 1
+        && Object.entries(value).every(([k, v]) => isLiteralOperator(k) && typeof v === 'string')
+}
+
+const buildSingleLiteralOperation = <T>(expected: string): ((v: any) => v is T) => {
+    return (value): value is T => isSingleLiteralOperationInternal(value) && expected in value;
+}
+
+export const isContainsOperation   = buildSingleLiteralOperation<ContainsLiteralOperation>(Operators.contains);
+export const isStartsWithOperation = buildSingleLiteralOperation<StartsWithLiteralOperation>(Operators.startswith);
+export const isEndsWithOperation   = buildSingleLiteralOperation<EndswithLiteralOperation>(Operators.endswith);
+
+export const isLikeOperation = (value: any): value is LikeLiteralOperation => {
+    return isSingleLiteralOperationInternal(value) && Operators.like in value && value[Operators.like].includes('%');
+}
+export const isEqLiteralOperation = (value: any): value is EqLiteralOperation => {
+    return isSingleLiteralOperationInternal(value) && Operators.eq in value;
+}
+
+export const isSingleLiteralOperation = (value: any): value is LiteralOperation => {
+    return isEqLiteralOperation(value)
+    || isLikeOperation(value)
+    || isContainsOperation(value)
+    || isStartsWithOperation(value)
+    || isEndsWithOperation(value)
+}
+
+export const isCombinedLiteralOperation = (value: any): value is LiteralOperation => {
+    return isNotNullOrUndefined(value)
+        && typeof value === 'object'
+        && !(Operators.eq in value)
+        && Object.values(value).length > 1
+        && Object.entries(value).every(([k, v]) => isSingleLiteralOperation({ [k]: v }));
+}
+
+const buildMatchLiteralOperation = <T>(expected: string): ((v: any) => v is T) => {
+    return (value): value is T => (isSingleLiteralOperation(value) && expected in value)
+        || (isCombinedLiteralOperation(value) && expected in value);
+}
+
+export const matchLikeOperation       = buildMatchLiteralOperation<LikeLiteralOperation>(Operators.like);
+export const matchContainsOperation   = buildMatchLiteralOperation<ContainsLiteralOperation>(Operators.contains);
+export const matchStartsWithOperation = buildMatchLiteralOperation<StartsWithLiteralOperation>(Operators.startswith);
+export const matchEndsWithOperation   = buildMatchLiteralOperation<EndswithLiteralOperation>(Operators.endswith);
+
+export const isLiteralOperation = (value: any): value is LiteralOperation => {
+    return isSingleLiteralOperation(value) || isCombinedLiteralOperation(value);
 }
 
 //---------------------------------------------------------------------------------- Single Value Operation Guards
