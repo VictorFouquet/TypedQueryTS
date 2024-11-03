@@ -1,6 +1,5 @@
-import { NumericalOperator, EqualityOp, LtOp, LteOp, GtOp, GteOp, LiteralOperator, BooleanOperator, LikeOp } from "./operator.types";
+import { NumericalOperator, EqualityOp, LtOp, LteOp, GtOp, GteOp, LiteralOperator, BooleanOperator, LikeOp, ContainsOp, AllOp, SomeOp, StartswithOp, EndswithOp } from "./operator.types";
 import { AtLeastOne, ExactlyOne, Numeric } from "./utils.types";
-
 
 // Numerical single operation type generation
 export type SingleNumericalOperationType<K extends NumericalOperator, V> = ExactlyOne<{
@@ -50,17 +49,34 @@ export type NumericalOperation<V extends Numeric> = V extends number ?
     SingleNumericalOperations<number> | DoubleNumericalOperations<number> :
     SingleNumericalOperations<Date> | DoubleNumericalOperations<Date>;
 
-// Literal operation must contain at least one operator and invalid any combination containing "eq"
-export type LiteralOperation = ExactlyOne<{
-    [K in LiteralOperator]:
-        K extends EqualityOp ? string :
+
+export type SingleLiteralOperation<K extends LiteralOperator> = ExactlyOne<{
+    [P in K]:
+        P extends EqualityOp ? string :
         never
-}> | AtLeastOne<{
-    [K in LiteralOperator]:
-        K extends EqualityOp ? never :
-        K extends LikeOp ? `${string}%${string}` :
+}>
+
+export type CombinedLiteralOperation<K extends LiteralOperator> = AtLeastOne<{
+    [P in K]:
+        P extends EqualityOp ? never :
+        P extends LikeOp ? `${string}%${string}` :
         string
 }>
+
+export type EqLiteralOperation         = SingleLiteralOperation<EqualityOp>
+export type LikeLiteralOperation       = CombinedLiteralOperation<LikeOp>
+export type ContainsLiteralOperation   = CombinedLiteralOperation<ContainsOp>
+export type StartsWithLiteralOperation = CombinedLiteralOperation<StartswithOp>
+export type EndswithLiteralOperation   = CombinedLiteralOperation<EndswithOp>
+
+// Literal operation must contain at least one operator and invalid any combination containing "eq"
+//SingleLiteralOperation<LiteralOperator> | CombinedLiteralOperation<LiteralOperator>
+export type LiteralOperation = 
+    | EqLiteralOperation
+    | LikeLiteralOperation
+    | ContainsLiteralOperation
+    | StartsWithLiteralOperation
+    | EndswithLiteralOperation;
 
 // Boolean operation must contain exactly one operator
 export type BooleanOperation = ExactlyOne<{ [K in BooleanOperator]: boolean }>
