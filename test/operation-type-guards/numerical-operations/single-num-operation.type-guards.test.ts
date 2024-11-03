@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------- isSingleNumericalOperation
 
 import { test, expect } from "vitest";
-import { isSingleNumericalOperation, isLtOperation, isGtOperation, isLteOperation, isGteOperation, isEqNumOperation } from "../../src/operation.type-guards";
+import { isSingleNumericalOperation, isLtOperation, isGtOperation, isLteOperation, isGteOperation, isEqNumOperation } from "../../../src/operation.type-guards";
 
 test("isSingleNumericalOperation should be true if value contains one NumericalOperator associated to a number", () => {
     expect(isSingleNumericalOperation({ lt: 0 })).toBe(true);

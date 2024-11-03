@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------- isDoubleNumericalOperation
 
 import { test, expect } from "vitest";
-import { isDoubleNumericalOperation, isLtGtOperation, isLteGtOperation, isLtGteOperation, isLteGteOperation } from "../../src/operation.type-guards";
+import { isDoubleNumericalOperation, isLtGtOperation, isLteGtOperation, isLtGteOperation, isLteGteOperation } from "../../../src/operation.type-guards";
 
 test("isDoubleNumericalOperation should be true if value contains two NumericalOperator associated to a number with upper and lower bound", () => {
     expect(isDoubleNumericalOperation({ lt: 0, gt: 0 })).toBe(true);
@@ -29,6 +29,18 @@ test("isDoubleNumericalOperation should be true if value contains two NumericalO
 
     expect(isDoubleNumericalOperation({ lte: new Date(), gt: new Date() })).toBe(true);
     expect(isDoubleNumericalOperation({ lte: new Date(), gte: new Date() })).toBe(true);
+});
+
+test("isDoubleNumericalOperation should be true if value contains two NumericalOperator associated to a Date and a number", () => {
+    expect(isDoubleNumericalOperation({ lt:  new Date(), gt:  0 })).toBe(false);
+    expect(isDoubleNumericalOperation({ lt:  new Date(), gte: 0 })).toBe(false);
+    expect(isDoubleNumericalOperation({ lte: new Date(), gt:  0 })).toBe(false);
+    expect(isDoubleNumericalOperation({ lte: new Date(), gte: 0 })).toBe(false);
+
+    expect(isDoubleNumericalOperation({ lt:  0, gt:  new Date() })).toBe(false);
+    expect(isDoubleNumericalOperation({ lt:  0, gte: new Date() })).toBe(false);
+    expect(isDoubleNumericalOperation({ lte: 0, gt:  new Date() })).toBe(false);
+    expect(isDoubleNumericalOperation({ lte: 0, gte: new Date() })).toBe(false);
 });
 
 test("isDoubleNumericalOperation should be false if value contains two NumericalOperator associated to a Date with 2 bounds of same type", () => {
