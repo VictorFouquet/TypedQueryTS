@@ -161,6 +161,10 @@ whereClause = {
 
 More details in the [filtering](https://github.com/VictorFouquet/TypedQueryTS/wiki/Filtering) section.
 
+## Type guards
+
+*Coming soon - work in progress*
+
 ## Building blocks
 
 ### Operations
